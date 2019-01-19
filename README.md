@@ -32,5 +32,5 @@ Start the application up by typing
 python3 main_flask.py
 ```
 
-Then navigate to your server's IP in your browser, the tool should automatically discover ONVIF-compliant devices in your network before displaying the page
+Then navigate to your server's IP in your browser, the tool should automatically discover ONVIF-compliant devices in your network before displaying the page.
 To start a test just press "Start" button, the page should refresh automatically after the test is done
