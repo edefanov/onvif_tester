@@ -10,7 +10,7 @@ A tool for testing ONVIF compatible cameras on a method-by-method basis with .cs
 * [Flask](http://flask.pocoo.org/)
 * [Python-onvif](https://github.com/quatanium/python-onvif)
 * [Tablib](http://docs.python-tablib.org/en/master/)
-* [WSDiscovery] (https://pypi.org/project/WSDiscovery/)
+* [WSDiscovery](https://pypi.org/project/WSDiscovery/)
 
 ### Installing
 
