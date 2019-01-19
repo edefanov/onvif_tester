@@ -1,0 +1,73 @@
+Device IP,192.168.11.33
+Test Performed,2019-01-14 09:28:10
+DeviceMgmt,True
+DeviceIO,False
+Events,False
+Analytics,True
+PTZ,True
+Media,True
+,
+,
+GetSystemLog,Not Supported Or Empty
+GetRemoteDiscoveryMode,Discoverable
+GetEndpointReference,"{
+    'GUID': None,
+    '_value_1': None
+}"
+GetSystemDateAndTime,"{
+    'DateTimeType': 'Manual',
+    'DaylightSavings': False,
+    'TimeZone': {
+        'TZ': 'EAT-3'
+    },
+    'UTCDateTime': {
+        'Time': {
+            'Hour': 9,
+            'Minute': 52,
+            'Second': 50
+        },
+        'Date': {
+            'Year': 2019,
+            'Month': 1,
+            'Day': 14
+        }
+    },
+    'LocalDateTime': {
+        'Time': {
+            'Hour': 12,
+            'Minute': 52,
+            'Second': 50
+        },
+        'Date': {
+            'Year': 2019,
+            'Month': 1,
+            'Day': 14
+        }
+    },
+    'Extension': None,
+    '_attr_1': None
+}"
+GetDiscoveryMode,Discoverable
+SetDiscoveryMode,Supported
+GetRemoteDiscoveryMode,Discoverable
+GetUsers,"[{
+    'Username': 'admin',
+    'Password': None,
+    'UserLevel': 'Administrator',
+    'Extension': None,
+    '_attr_1': None
+}, {
+    'Username': 'Operator',
+    'Password': None,
+    'UserLevel': 'Operator',
+    'Extension': None,
+    '_attr_1': None
+}]"
+CreateUsers,Supported
+SetUser,Not Supported
+DeleteUsers,Not Supported
+,
+,
+GetServiceCapabilities,Not Supported
+CreatePullPointSubscription,Not Supported
+PullMessages,Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)

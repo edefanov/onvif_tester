@@ -1,0 +1,97 @@
+Device IP,192.168.11.24
+Test Performed,2019-01-14 09:17:58
+DeviceMgmt,True
+DeviceIO,False
+Events,False
+Analytics,True
+PTZ,True
+Media,True
+,
+,
+GetSystemLog,Not Supported Or Empty
+GetRemoteDiscoveryMode,Discoverable
+GetEndpointReference,"{
+    'GUID': None,
+    '_value_1': None
+}"
+GetSystemDateAndTime,"{
+    'DateTimeType': 'Manual',
+    'DaylightSavings': False,
+    'TimeZone': {
+        'TZ': 'CST-8'
+    },
+    'UTCDateTime': {
+        'Time': {
+            'Hour': 9,
+            'Minute': 44,
+            'Second': 16
+        },
+        'Date': {
+            'Year': 2019,
+            'Month': 1,
+            'Day': 14
+        }
+    },
+    'LocalDateTime': {
+        'Time': {
+            'Hour': 12,
+            'Minute': 44,
+            'Second': 16
+        },
+        'Date': {
+            'Year': 2019,
+            'Month': 1,
+            'Day': 14
+        }
+    },
+    'Extension': None,
+    '_attr_1': None
+}"
+GetDiscoveryMode,Discoverable
+SetDiscoveryMode,Supported
+GetRemoteDiscoveryMode,Discoverable
+GetUsers,"[{
+    'Username': 'admin',
+    'Password': None,
+    'UserLevel': 'Administrator',
+    'Extension': None,
+    '_attr_1': None
+}, {
+    'Username': 'Operator',
+    'Password': None,
+    'UserLevel': 'Operator',
+    'Extension': None,
+    '_attr_1': None
+}]"
+CreateUsers,Supported
+SetUser,Supported
+DeleteUsers,Supported
+,
+,
+GetServiceCapabilities,"{
+    '_value_1': None,
+    'WSSubscriptionPolicySupport': True,
+    'WSPullPointSupport': True,
+    'WSPausableSubscriptionManagerInterfaceSupport': False,
+    'MaxNotificationProducers': None,
+    'MaxPullPoints': None,
+    'PersistentNotificationStorage': None,
+    '_attr_1': {
+}
+}"
+CreatePullPointSubscription,"{
+    'SubscriptionReference': {
+        'Address': {
+            '_value_1': 'http://192.168.11.24:80/onvif/Subscription?Idx=0',
+            '_attr_1': None
+        },
+        'ReferenceParameters': None,
+        'Metadata': None,
+        '_value_1': None,
+        '_attr_1': None
+    },
+    'CurrentTime': datetime.datetime(2019, 1, 14, 12, 44, 16, tzinfo=<isodate.tzinfo.Utc object at 0x7fa4f6dd61d0>),
+    'TerminationTime': datetime.datetime(2019, 1, 14, 12, 45, 16, tzinfo=<isodate.tzinfo.Utc object at 0x7fa4f6dd61d0>),
+    '_value_1': None
+}"
+PullMessages,Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)
