@@ -40,13 +40,27 @@ class Tester:
         
         ip = config.get('IP')
         ip = ip.split(':')
+        port = ip[1]
         ip = ip[0]
-        port = 80
+        print(' ')
+        print(' ')
+        print(' ip = ', ip)
+        print(' PORT =  ', port)
+        print(' ')
+        print(' ')
+        #port = 80
         login = 'admin'
         password = 'Supervisor'
         
         
         mycam = ONVIFCamera(ip, port, login, password)
+        
+        # variables
+        
+        getStatusF = None
+        GetProfilesF = True
+        vSourceToken = None
+        
         
         # trying out different services
         
@@ -218,6 +232,61 @@ class Tester:
                 dmgmtResult = dmgmtResult + [['SetUser', 'Unable to test due to unavailability of GetUsers() method']] 
                 dmgmtResult = dmgmtResult + [['DeleteUsers', 'Unable to test due to unavailability of GetUsers() method']] 
                 
+            try:
+                testBuffer = str(dmgmt2.GetHostname())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
+            
+            try:
+                testBuffer = str(dmgmt2.GetDNS())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetDNS', testBuffer]]
+            
+            try:
+                testBuffer = str(dmgmt2.GetDynamicDNS())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetDynamicDNS', testBuffer]]
+            
+            try:
+                testBuffer = str(dmgmt2.GetNetworkProtocols())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetNetworkProtocols', testBuffer]]
+            
+            try:
+                testBuffer = str(dmgmt2.GetNetworkInterfaces())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetNetworkInterfaces', testBuffer]]
+            
+            try:
+                testBuffer = str(dmgmt2.GetNTP())
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = dmgmtResult + [['GetNTP', testBuffer]]
+                
+        
+        
+        ####################################
+        #   testing media service block    #
+        #################################### 
+        
+        if mediaF:
+            mediaResult = None
+            try:
+                testBuffer = media.GetVideoSources()
+                testBuffer2 = str(testBuffer2)
+                vSourceToken = testBuffer[0].token
+            except:
+                testBuffer = "Not Supported"
+            dmgmtResult = [['GetVideoSources', testBuffer2]]
+            
+            try:
+                
+        
         ####################################
         #   testing events service block   #
         ####################################  
@@ -250,6 +319,115 @@ class Tester:
                 eventResult = eventResult + [['GetEventProperties', testBuffer]]
             else:
                 eventsF = False
+                
+        
+        ####################################
+        #    testing ptz service block     #
+        ####################################
+        
+        if ptzF:
+            ptzResult = None
+            GetNodesF = False
+            try:
+                testBuffer = str(ptz.GetNodes())
+                GetNodesF = True
+            except:
+                testBuffer = "Not Supported"
+            ptzResult = [['GetNodes', testBuffer]]
+        
+            if testBuffer == "Not Supported":
+                testBuffer = "Not Supported Due To GetNodes() Unavailability"
+            else:
+                testBuffer = ptz.GetNodes()
+                testBuffer2 = ptz.GetNode(testBuffer[0].token)
+                if testBuffer2 == testBuffer[0]:
+                    testBuffer = "Supported"
+                else:
+                    testBuffer = "Not Supported"
+            ptzResult = ptzResult + [['GetNode', testBuffer]]
+            
+            try:
+                testBuffer = str(ptz.GetConfigurations())
+            except:
+                testBuffer = "Not Supported"
+            ptzResult = ptzResult + [['GetConfigurations', testBuffer]]
+        
+            if testBuffer == "Not Supported":
+                testBuffer = "Unable to test due to unavailability of GetConfigurations() method"
+            else:
+                testBuffer = ptz.GetConfigurations()
+                testBuffer2 = ptz.GetConfiguration(testBuffer[0].token)
+                if testBuffer2 == testBuffer[0]:
+                    testBuffer = "Supported"
+                else:
+                    testBuffer = "Not Supported"
+            ptzResult = ptzResult + [['GetConfiguration', testBuffer]]
+            
+            if GetNodesF:
+                try:
+                    if GetProfilesF:
+                        mediaToken = media.GetProfiles()[0].token
+                        statusInit = ptz.GetStatus(mediaToken)
+                        if statusInit.MoveStatus:
+                            statusBefore = statusInit.MoveStatus
+                            req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                            ptz.ContinuousMove(req)
+                            sleep(2)
+                            statusDuring1 = ptz.GetStatus(mediaToken)
+                            ptz.Stop(mediaToken)
+                            req.Velocity.PanTilt.x = -0.1
+                            sleep(2.5)
+                            ptz.ContinuousMove(req)
+                            statusDuring2 = ptz.GetStatus(mediaToken)
+                            ptz.Stop(mediaToken)
+                            if statusBefore == statusDuring1.MoveStatus and statusBefore == statusDuring2.MoveStatus:
+                                testBuffer = "MoveStatus property not functioning correctly; "
+                                getStatusF = [0]
+                            else:
+                                testBuffer = "MoveStatus property supported and functions correctly; "
+                                getStatusF = [1]
+                        else:
+                            testBuffer = "MoveStatus property not supported; "
+                            getStatusF = [0]
+                        if statusInit.Position:
+                            statusBefore = statusInit.Position
+                            req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                            ptz.ContinuousMove(req)
+                            sleep(2)
+                            statusDuring1 = ptz.GetStatus(mediaToken)
+                            ptz.Stop(mediaToken)
+                            req.Velocity.PanTilt.x = -0.1
+                            ptz.ContinuousMove(req)
+                            sleep(2.5)
+                            statusDuring2 = ptz.GetStatus(mediaToken)
+                            ptz.Stop(mediaToken)
+                            if statusBefore == statusDuring1.Position and statusBefore == statusDuring2.Position:
+                                testBuffer = testBuffer + "Position property not functioning correctly; "
+                                getStatusF = getStatusF + [0]
+                            else:
+                                testBuffer = testBuffer + "Position property supported and functions correctly; "
+                                getStatusF = getStatusF + [1]
+                        else:
+                            testBuffer = testBuffer + "Position property not supported; "
+                            getStatusF = getStatusF + [0]
+                    else:
+                        testBuffer = "Unable to test due to unavailability of GetProfiles() method"
+                        getStatusF = [0, 0]
+                except:
+                    testBuffer = "Not Supported"
+                    getStatusF = [0, 0]
+                ptzResult = ptzResult + [['GetStatus', testBuffer]]
+            else:
+                testBuffer = "Unable to test due to unavailability of GetNodes() method"
+                getStatusF = [0, 0]
+                ptzResult = ptzResult + [['GetStatus', testBuffer]]
+                
+            if getStatusF == [0, 0]:
+                testBuffer = 'Unable to test due to unavailability of GetStatus() method'
+                ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
+                ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
+                ptzResult = ptzResult + [['RelativeMove', testBuffer]]
+            #elif getStatusF == [0, 1]:   
         
         date = str(datetime.datetime.now())
         date = date.split('.')
@@ -267,4 +445,6 @@ class Tester:
             writer.writerows(dmgmtResult)
             writer.writerows(spacer)
             writer.writerows(eventResult)
+            writer.writerows(spacer)
+            writer.writerows(ptzResult)
         csvFile.close()    
