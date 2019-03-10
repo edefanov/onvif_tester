@@ -6,6 +6,8 @@ import zeep
 import os
 import csv
 import datetime
+import logging
+import sys
 
 
 class Tester:
@@ -18,7 +20,12 @@ class Tester:
         return xmlvalue
 
     def main(self):
+    
+        logpath = os.getcwd() + '/engine/utils/log.txt'
         
+        logging.basicConfig(filename=logpath, level=logging.DEBUG)
+        
+        #sys.stdout = open(os.getcwd() + '/engine/utils/error.txt', 'w')
         
         # reading config
         
@@ -58,7 +65,8 @@ class Tester:
         # variables
         
         getStatusF = None
-        GetProfilesF = True
+        getiStatusF = None
+        GetProfilesF = False
         vSourceToken = None
         
         
@@ -94,6 +102,11 @@ class Tester:
             ptzF = True
         except:
             ptzF = False
+        try:
+            imaging = mycam.create_imaging_service()
+            imagingF = True
+        except:
+            imagingF = False
         
         ####################################
         # testing deviceMGMT service block #
@@ -107,37 +120,49 @@ class Tester:
                 testBuffer = "Not Supported"
             dmgmtResult = [['GetDeviceInformation', testBuffer]]
             
+            sleep(0.5)
+            
             try:
                 testBuffer = str(dmgmt.GetSystemLog())
             except:
                 testBuffer = "Not Supported Or Empty"
             dmgmtResult = [['GetSystemLog', testBuffer]]
             
+            sleep(0.5)
+            
             try:
                 testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]         
-        
+            
+            sleep(0.5)
+            
             try:
                 testBuffer = str(dmgmt.GetEndpointReference())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetEndpointReference', testBuffer]]    
-
+            
+            sleep(0.5)
+            
             try:
                 testBuffer = str(dmgmt.GetSystemDateAndTime())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetSystemDateAndTime', testBuffer]]              
-
+            
+            sleep(0.5)
+            
             try:
                 testBuffer = str(dmgmt.GetDiscoveryMode())
                 testBuffer2 = testBuffer
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetDiscoveryMode', testBuffer]]
-
+            
+            sleep(0.5)
+            
             if testBuffer == 'Discoverable':
                 dmgmt.SetDiscoveryMode('NonDiscoverable')
                 testBuffer = str(dmgmt.GetDiscoveryMode())
@@ -150,6 +175,8 @@ class Tester:
                 if testBuffer == 'Discoverable':
                     dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
                     dmgmt.SetDiscoveryMode(testBuffer2)
+            
+            sleep(0.5)
             
             try:
                 testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
@@ -174,20 +201,46 @@ class Tester:
                 dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Not Supported']]
             
             try:
+                dmgmt.DeleteUsers('O1N2V3IFTester')
+            except:
+                print('no onviftester')
+            
+            sleep(1)
+            dmgmt = mycam.create_devicemgmt_service()
+            
+            try:
                 testBuffer = str(dmgmt.GetUsers())
-                testBuffer2 = dmgmt.GetUsers()
             except:
                 testBuffer = "Not Supported"
+                logging.exception('get users')
             dmgmtResult = dmgmtResult + [['GetUsers', testBuffer]]
+            
+            sleep(1)
+            
+            '''testBuffer2 = dmgmt.GetUsers()
+            NewUser = testBuffer2[0]
+            NewUser.Username = 'O1N2V3IFTester'
+            NewUser.Password = 'Tester4444'
+            NewUser.UserLevel = 'User'
+            dmgmt.CreateUsers(NewUser)
+            sleep(1)
+            testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
+            print('new userino test    ', str(testBuffer2))'''
             
             if "Not Supported" not in testBuffer:
                 try:
-                    NewUser = dmgmt.GetUsers()[0]
+                
+                    testBuffer2 = dmgmt.GetUsers()
+                    NewUser = testBuffer2[0]
                     NewUser.Username = 'O1N2V3IFTester'
                     NewUser.Password = 'Tester4444'
                     NewUser.UserLevel = 'User'
+                    print(NewUser)
                     dmgmt.CreateUsers(NewUser)
+                    sleep(1)
+                    dmgmt = mycam.create_devicemgmt_service()
                     testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
+                    print(testBuffer2)
                     if testBuffer2.Username == 'O1N2V3IFTester':
                         testBuffer = 'Supported'
                         dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]]
@@ -196,7 +249,10 @@ class Tester:
                         dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]] 
                 except:
                     testBuffer = "Not Supported"
+                    logging.error('create user')
                     dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]] 
+                
+                sleep(1)
                 
                 if testBuffer == 'Supported':
                     try:
@@ -211,8 +267,11 @@ class Tester:
                             dmgmtResult = dmgmtResult + [['SetUser', testBuffer]] 
                     except:
                         testBuffer = "Not Supported"
+                        logging.exception('set user')
                         dmgmtResult = dmgmtResult + [['SetUser', testBuffer]] 
-                
+                    
+                    sleep(1)
+                    
                     try:
                         dmgmt.DeleteUsers('O1N2V3IFTester')
                         testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
@@ -224,6 +283,7 @@ class Tester:
                             dmgmtResult = dmgmtResult + [['DeleteUsers', testBuffer]] 
                     except:
                         testBuffer = "Not Supported"
+                        logging.exception('delete users')
                         dmgmtResult = dmgmtResult + [['DeleteUsers', testBuffer]]
                 else:
                     dmgmtResult = dmgmtResult + [['SetUser', 'Unable to test due to unavailability of CreateUsers() method']] 
@@ -231,45 +291,52 @@ class Tester:
             else:
                 dmgmtResult = dmgmtResult + [['SetUser', 'Unable to test due to unavailability of GetUsers() method']] 
                 dmgmtResult = dmgmtResult + [['DeleteUsers', 'Unable to test due to unavailability of GetUsers() method']] 
-                
-            try:
-                testBuffer = str(dmgmt2.GetHostname())
-            except:
-                testBuffer = "Not Supported"
-            dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
+            
+            sleep(1)
             
             try:
-                testBuffer = str(dmgmt2.GetDNS())
+                testBuffer = str(dmgmt.GetHostname())
+                #print("gethostname   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
+                #print("gethostname   ", testBuffer)
+            dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
+            
+            sleep(1)
+            
+            try:
+                testBuffer = str(dmgmt.GetDNS())
+                #print("getdns   ", testBuffer)
+            except:
+                testBuffer = "Not Supported"
+                #print("getdns   ", testBuffer)
             dmgmtResult = dmgmtResult + [['GetDNS', testBuffer]]
             
             try:
-                testBuffer = str(dmgmt2.GetDynamicDNS())
+                testBuffer = str(dmgmt.GetDynamicDNS())
+                #print("getdynamicdns   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetDynamicDNS', testBuffer]]
             
             try:
-                testBuffer = str(dmgmt2.GetNetworkProtocols())
+                testBuffer = str(dmgmt.GetNetworkProtocols())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetNetworkProtocols', testBuffer]]
             
             try:
-                testBuffer = str(dmgmt2.GetNetworkInterfaces())
+                testBuffer = str(dmgmt.GetNetworkInterfaces())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetNetworkInterfaces', testBuffer]]
             
             try:
-                testBuffer = str(dmgmt2.GetNTP())
+                testBuffer = str(dmgmt.GetNTP())
             except:
                 testBuffer = "Not Supported"
             dmgmtResult = dmgmtResult + [['GetNTP', testBuffer]]
-                
-        
-        
+            
         ####################################
         #   testing media service block    #
         #################################### 
@@ -278,14 +345,80 @@ class Tester:
             mediaResult = None
             try:
                 testBuffer = media.GetVideoSources()
-                testBuffer2 = str(testBuffer2)
+                testBuffer2 = str(testBuffer)
                 vSourceToken = testBuffer[0].token
             except:
-                testBuffer = "Not Supported"
-            dmgmtResult = [['GetVideoSources', testBuffer2]]
+                testBuffer2 = "Not Supported"
+            mediaResult = [['GetVideoSources', testBuffer2]]
             
             try:
-                
+                testBuffer = media.GetAudioSources()
+                testBuffer2 = str(testBuffer)
+            except:
+                testBuffer2 = "Not Supported"
+            mediaResult = mediaResult + [['GetAudioSources', testBuffer2]]
+            
+            try:
+                testBuffer2 = str(media.GetAudioEncoderConfigurationOptions())
+            except:
+                testBuffer2 = "Not Supported"
+            mediaResult = mediaResult + [['GetAudioEncoderConfigurationOptions', testBuffer2]]
+            
+            try:
+                testBuffer2 = str(media.GetVideoEncoderConfigurationOptions())
+            except:
+                testBuffer2 = "Not Supported"
+            mediaResult = mediaResult + [['GetVideoEncoderConfigurationOptions', testBuffer2]]
+            
+            try:
+                testBuffer2 = str(media.GetProfiles())
+                GetProfilesF = True
+            except:
+                testBuffer2 = "Not Supported"
+            mediaResult = mediaResult + [['GetProfiles', testBuffer2]]
+        
+        ####################################
+        #   testing imaging service block  #
+        ####################################  
+        
+        if imagingF:
+            imagingResult = None
+            try:
+                testBuffer = str(imaging.GetOptions(vSourceToken))
+                testBuffer2 = testBuffer
+            except:
+                testBuffer = "Not Supported"
+            imagingResult = [['GetOptions', testBuffer]]
+            
+            try:
+                testBuffer = str(imaging.GetImagingSettings(vSourceToken))
+            except:
+                testBuffer = "Not Supported"
+            imagingResult = imagingResult + [['GetImagingSettings', testBuffer]]
+            
+            try:
+                testBuffer = str(imaging.GetMoveOptions(vSourceToken))
+            except:
+                testBuffer = "Not Supported"
+            imagingResult = imagingResult + [['GetMoveOptions', testBuffer]]
+            
+            try:
+                testBuffer = imaging.GetStatus(vSourceToken)
+                testBuffer2 = str(testBuffer)
+                if testBuffer.FocusStatus20.MoveStatus == 'UNKNOWN':
+                    getiStatusF = [0]
+                else:
+                    getiStatusF = [1]
+            except:
+                testBuffer2 = "Not Supported"
+            imagingResult = imagingResult + [['GetStatus', testBuffer2]]
+            
+            #if 'MANUAL' in testBuffer2.Focus.AutoFocusModes:
+            #    try:
+            #        testBuffer2 
+            #    except:
+            #        testBuffer = "Not Supported"
+            #    imagingResult = [['GetImagingSettings', testBuffer]]
         
         ####################################
         #   testing events service block   #
@@ -363,6 +496,13 @@ class Tester:
                     testBuffer = "Not Supported"
             ptzResult = ptzResult + [['GetConfiguration', testBuffer]]
             
+            sleep(1)
+            
+            mediaToken = media.GetProfiles()[0].token
+            statusInit = ptz.GetStatus(mediaToken)
+            print(str(statusInit))
+            
+            
             if GetNodesF:
                 try:
                     if GetProfilesF:
@@ -372,11 +512,11 @@ class Tester:
                             statusBefore = statusInit.MoveStatus
                             req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
                             ptz.ContinuousMove(req)
-                            sleep(2)
+                            sleep(1)
                             statusDuring1 = ptz.GetStatus(mediaToken)
                             ptz.Stop(mediaToken)
-                            req.Velocity.PanTilt.x = -0.1
-                            sleep(2.5)
+                            req['Velocity']['PanTilt']['x'] = -0.1
+                            sleep(1.5)
                             ptz.ContinuousMove(req)
                             statusDuring2 = ptz.GetStatus(mediaToken)
                             ptz.Stop(mediaToken)
@@ -393,22 +533,22 @@ class Tester:
                             statusBefore = statusInit.Position
                             req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
                             ptz.ContinuousMove(req)
-                            sleep(2)
+                            sleep(1)
                             statusDuring1 = ptz.GetStatus(mediaToken)
                             ptz.Stop(mediaToken)
-                            req.Velocity.PanTilt.x = -0.1
+                            req['Velocity']['PanTilt']['x'] = -0.1
                             ptz.ContinuousMove(req)
-                            sleep(2.5)
+                            sleep(1.5)
                             statusDuring2 = ptz.GetStatus(mediaToken)
                             ptz.Stop(mediaToken)
                             if statusBefore == statusDuring1.Position and statusBefore == statusDuring2.Position:
-                                testBuffer = testBuffer + "Position property not functioning correctly; "
+                                testBuffer = testBuffer + "Position property not functioning correctly"
                                 getStatusF = getStatusF + [0]
                             else:
-                                testBuffer = testBuffer + "Position property supported and functions correctly; "
+                                testBuffer = testBuffer + "Position property supported and functions correctly"
                                 getStatusF = getStatusF + [1]
                         else:
-                            testBuffer = testBuffer + "Position property not supported; "
+                            testBuffer = testBuffer + "Position property not supported"
                             getStatusF = getStatusF + [0]
                     else:
                         testBuffer = "Unable to test due to unavailability of GetProfiles() method"
@@ -443,6 +583,10 @@ class Tester:
             writer.writerows(spacer)
             #writer.writerows(header2)
             writer.writerows(dmgmtResult)
+            writer.writerows(spacer)
+            writer.writerows(mediaResult)
+            writer.writerows(spacer)
+            writer.writerows(imagingResult)
             writer.writerows(spacer)
             writer.writerows(eventResult)
             writer.writerows(spacer)

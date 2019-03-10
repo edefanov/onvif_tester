@@ -4,18 +4,14 @@
         {% for id in ids %}
          $("#ON_{{id}}").click( function()
            {                 
-             
                 {% for id in ids %}
                 document.getElementById("ON_{{id}}").disabled = true;
                 {% endfor %}
-                    
-            $.getJSON('/set_on', {'id': {{id}}}, function(data) {  });
-            setTimeout(function () { location.reload(1); }, 5000);
-             return false;   
+            $.getJSON('/set_on', {'id': {{id}}}, function(data) { if (data.status == 'finished') {location.reload(1)} });
+            console.log('set on')
           });
           
            $("#viewReport_{{id}}").click( function() {
-
                 var id={{id}}
                 var redirectwindow = window.open('/viewfull/'+id, '_blank')
                 redirectwindow.location;                           

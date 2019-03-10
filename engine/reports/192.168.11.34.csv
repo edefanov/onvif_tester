@@ -1,5 +1,5 @@
-Device IP,192.168.11.23
-Test Performed,2019-03-10 23:07:32
+Device IP,192.168.11.34
+Test Performed,2019-03-10 22:36:45
 DeviceMgmt,True
 DeviceIO,False
 Events,False
@@ -22,9 +22,9 @@ GetSystemDateAndTime,"{
     },
     'UTCDateTime': {
         'Time': {
-            'Hour': 20,
-            'Minute': 22,
-            'Second': 18
+            'Hour': 19,
+            'Minute': 52,
+            'Second': 36
         },
         'Date': {
             'Year': 2019,
@@ -34,9 +34,9 @@ GetSystemDateAndTime,"{
     },
     'LocalDateTime': {
         'Time': {
-            'Hour': 23,
-            'Minute': 22,
-            'Second': 18
+            'Hour': 22,
+            'Minute': 52,
+            'Second': 36
         },
         'Date': {
             'Year': 2019,
@@ -47,25 +47,12 @@ GetSystemDateAndTime,"{
     'Extension': None,
     '_attr_1': None
 }"
-GetDiscoveryMode,Discoverable
+GetDiscoveryMode,NonDiscoverable
 SetDiscoveryMode,Supported
 GetRemoteDiscoveryMode,Discoverable
-GetUsers,"[{
-    'Username': 'admin',
-    'Password': None,
-    'UserLevel': 'Administrator',
-    'Extension': None,
-    '_attr_1': None
-}, {
-    'Username': 'Operator',
-    'Password': None,
-    'UserLevel': 'Operator',
-    'Extension': None,
-    '_attr_1': None
-}]"
-CreateUsers,Not Supported
-SetUser,Unable to test due to unavailability of CreateUsers() method
-DeleteUsers,Unable to test due to unavailability of CreateUsers() method
+GetUsers,Not Supported
+SetUser,Unable to test due to unavailability of GetUsers() method
+DeleteUsers,Unable to test due to unavailability of GetUsers() method
 GetHostname,"{
     'FromDHCP': False,
     'Name': 'null',
@@ -118,7 +105,7 @@ GetNetworkInterfaces,"[{
     'Enabled': True,
     'Info': {
         'Name': 'eth0',
-        'HwAddress': '58:04:CB:00:D1:2E',
+        'HwAddress': '58:04:CB:00:D6:B0',
         'MTU': 1500
     },
     'Link': None,
@@ -127,13 +114,13 @@ GetNetworkInterfaces,"[{
         'Config': {
             'Manual': [
                 {
-                    'Address': '192.168.11.23',
+                    'Address': '192.168.11.34',
                     'PrefixLength': 24
                 }
             ],
             'LinkLocal': None,
             'FromDHCP': {
-                'Address': '192.168.11.23',
+                'Address': '192.168.11.34',
                 'PrefixLength': 24
             },
             'DHCP': False,
@@ -153,7 +140,7 @@ GetNTP,"{
     'NTPManual': [
         {
             'Type': 'IPv4',
-            'IPv4Address': '0.0.0.0',
+            'IPv4Address': 'time.windows.com',
             'IPv6Address': None,
             'DNSname': None,
             'Extension': None,
@@ -177,7 +164,7 @@ GetVideoSources,"[{
             'Level': 0.0
         },
         'Brightness': 50.0,
-        'ColorSaturation': 60.0,
+        'ColorSaturation': 50.0,
         'Contrast': 50.0,
         'Exposure': {
             'Mode': 'AUTO',
@@ -250,8 +237,8 @@ GetAudioEncoderConfigurationOptions,"{
 }"
 GetVideoEncoderConfigurationOptions,"{
     'QualityRange': {
-        'Min': 0,
-        'Max': 5
+        'Min': 6,
+        'Max': 14
     },
     'JPEG': {
         'ResolutionsAvailable': [
@@ -303,8 +290,8 @@ GetVideoEncoderConfigurationOptions,"{
     },
     'Extension': {
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7f96d01c5b48>,
-            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7f96d01c5e48>
+            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7fc4030623c8>,
+            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7fc4030626c8>
         ],
         'JPEG': None,
         'MPEG4': None,
@@ -340,11 +327,11 @@ GetProfiles,"[{
             'Width': 1920,
             'Height': 1080
         },
-        'Quality': 0.0,
+        'Quality': 12.3999996,
         'RateControl': {
-            'FrameRateLimit': 25,
+            'FrameRateLimit': 20,
             'EncodingInterval': 1,
-            'BitrateLimit': 3000
+            'BitrateLimit': 6565
         },
         'MPEG4': None,
         'H264': {
@@ -385,7 +372,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01ccf08>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7fc403069288>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -458,7 +445,7 @@ GetProfiles,"[{
                 'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
             }
         },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+        'DefaultPTZTimeout': datetime.timedelta(0, 600),
         'PanTiltLimits': None,
         'ZoomLimits': None,
         'Extension': None,
@@ -495,7 +482,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f96d01d1b08>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7fc40306c708>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -529,21 +516,21 @@ GetProfiles,"[{
     'AudioSourceConfiguration': None,
     'VideoEncoderConfiguration': {
         'Name': 'vecname_2',
-        'UseCount': 2,
+        'UseCount': 1,
         'Encoding': 'H264',
         'Resolution': {
             'Width': 704,
             'Height': 576
         },
-        'Quality': 0.0,
+        'Quality': 9.19999981,
         'RateControl': {
-            'FrameRateLimit': 6,
+            'FrameRateLimit': 25,
             'EncodingInterval': 1,
-            'BitrateLimit': 1000
+            'BitrateLimit': 512
         },
         'MPEG4': None,
         'H264': {
-            'GovLength': 6,
+            'GovLength': 50,
             'H264Profile': 'Baseline'
         },
         'Multicast': {
@@ -580,7 +567,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01cc488>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7fc40306e8c8>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -653,7 +640,7 @@ GetProfiles,"[{
                 'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
             }
         },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+        'DefaultPTZTimeout': datetime.timedelta(0, 600),
         'PanTiltLimits': None,
         'ZoomLimits': None,
         'Extension': None,
@@ -690,7 +677,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f96d01d6448>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7fc40306d608>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -701,165 +688,6 @@ GetProfiles,"[{
     'Extension': None,
     'token': 'protoken_2',
     'fixed': True,
-    '_attr_1': {
-}
-}, {
-    'Name': 'trackingProfile',
-    'VideoSourceConfiguration': {
-        'Name': 'vscname_1',
-        'UseCount': 3,
-        'SourceToken': 'videosource_1',
-        'Bounds': {
-            'x': 0,
-            'y': 0,
-            'width': 2048,
-            'height': 1536
-        },
-        '_value_1': None,
-        'Extension': None,
-        'token': 'vsctoken_1',
-        '_attr_1': {
-    }
-    },
-    'AudioSourceConfiguration': None,
-    'VideoEncoderConfiguration': {
-        'Name': 'vecname_2',
-        'UseCount': 2,
-        'Encoding': 'H264',
-        'Resolution': {
-            'Width': 704,
-            'Height': 576
-        },
-        'Quality': 0.0,
-        'RateControl': {
-            'FrameRateLimit': 6,
-            'EncodingInterval': 1,
-            'BitrateLimit': 1000
-        },
-        'MPEG4': None,
-        'H264': {
-            'GovLength': 6,
-            'H264Profile': 'Baseline'
-        },
-        'Multicast': {
-            'Address': {
-                'Type': 'IPv4',
-                'IPv4Address': '239.255.255.250',
-                'IPv6Address': None
-            },
-            'Port': 8000,
-            'TTL': 64,
-            'AutoStart': False,
-            '_value_1': None,
-            '_attr_1': None
-        },
-        'SessionTimeout': datetime.timedelta(0, 60),
-        '_value_1': None,
-        'token': 'vectoken_2',
-        '_attr_1': {
-    }
-    },
-    'AudioEncoderConfiguration': None,
-    'VideoAnalyticsConfiguration': {
-        'Name': 'VideoAnalyticsName',
-        'UseCount': 2,
-        'AnalyticsEngineConfiguration': {
-            'AnalyticsModule': [
-                {
-                    'Parameters': {
-                        'SimpleItem': [
-                            {
-                                'Name': 'Sensitivity',
-                                'Value': '1'
-                            }
-                        ],
-                        'ElementItem': [
-                            {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01d7508>,
-                                'Name': 'Layout'
-                            }
-                        ],
-                        'Extension': None,
-                        '_attr_1': None
-                    },
-                    'Name': 'MyCellMotionModule',
-                    'Type': 'tt:CellMotionEngine'
-                }
-            ],
-            'Extension': None,
-            '_attr_1': None
-        },
-        'RuleEngineConfiguration': {
-            'Rule': [
-                {
-                    'Parameters': {
-                        'SimpleItem': [
-                            {
-                                'Name': 'MinCount',
-                                'Value': '5'
-                            },
-                            {
-                                'Name': 'AlarmOnDelay',
-                                'Value': '100'
-                            },
-                            {
-                                'Name': 'AlarmOffDelay',
-                                'Value': '100'
-                            },
-                            {
-                                'Name': 'ActiveCells',
-                                'Value': 'zwA='
-                            }
-                        ],
-                        'ElementItem': [],
-                        'Extension': None,
-                        '_attr_1': None
-                    },
-                    'Name': 'MyMotionDetectorRule',
-                    'Type': 'tt:CellMotionDetector'
-                }
-            ],
-            'Extension': None,
-            '_attr_1': None
-        },
-        '_value_1': None,
-        'token': 'VideoAnalyticsToken',
-        '_attr_1': {
-    }
-    },
-    'PTZConfiguration': {
-        'Name': 'ptzcname_1',
-        'UseCount': 1,
-        'NodeToken': 'node_01',
-        'DefaultAbsolutePantTiltPositionSpace': 'http://www.onvif.org/ver10/tptz/PanTiltSpaces/PositionGenericSpace',
-        'DefaultAbsoluteZoomPositionSpace': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/PositionGenericSpace',
-        'DefaultRelativePanTiltTranslationSpace': 'http://www.onvif.org/ver10/tptz/PanTiltSpaces/TranslationGenericSpace',
-        'DefaultRelativeZoomTranslationSpace': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/TranslationGenericSpace',
-        'DefaultContinuousPanTiltVelocitySpace': 'http://www.onvif.org/ver10/tptz/PanTiltSpaces/VelocityGenericSpace',
-        'DefaultContinuousZoomVelocitySpace': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/VelocityGenericSpace',
-        'DefaultPTZSpeed': {
-            'PanTilt': {
-                'x': 1.0,
-                'y': 1.0,
-                'space': 'http://www.onvif.org/ver10/tptz/PanTiltSpaces/GenericSpeedSpace'
-            },
-            'Zoom': {
-                'x': 1.0,
-                'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
-            }
-        },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
-        'PanTiltLimits': None,
-        'ZoomLimits': None,
-        'Extension': None,
-        'token': 'ptzctoken_1',
-        '_attr_1': {
-    }
-    },
-    'MetadataConfiguration': None,
-    'Extension': None,
-    'token': 'protoken_3',
-    'fixed': False,
     '_attr_1': {
 }
 }]"
@@ -990,7 +818,7 @@ GetOptions,"{
 GetImagingSettings,"{
     'BacklightCompensation': None,
     'Brightness': 50.0,
-    'ColorSaturation': 60.0,
+    'ColorSaturation': 50.0,
     'Contrast': 50.0,
     'Exposure': None,
     'Focus': {
@@ -1072,7 +900,7 @@ GetServiceCapabilities,"{
 CreatePullPointSubscription,"{
     'SubscriptionReference': {
         'Address': {
-            '_value_1': 'http://192.168.11.23:80/onvif/Subscription?Idx=0',
+            '_value_1': 'http://192.168.11.34:80/onvif/Subscription?Idx=0',
             '_attr_1': None
         },
         'ReferenceParameters': None,
@@ -1080,8 +908,8 @@ CreatePullPointSubscription,"{
         '_value_1': None,
         '_attr_1': None
     },
-    'CurrentTime': datetime.datetime(2019, 3, 10, 23, 22, 27, tzinfo=<isodate.tzinfo.Utc object at 0x7f96d331df98>),
-    'TerminationTime': datetime.datetime(2019, 3, 10, 23, 23, 27, tzinfo=<isodate.tzinfo.Utc object at 0x7f96d331df98>),
+    'CurrentTime': datetime.datetime(2019, 3, 10, 22, 52, 43, tzinfo=<isodate.tzinfo.Utc object at 0x7fc409d9df98>),
+    'TerminationTime': datetime.datetime(2019, 3, 10, 22, 53, 43, tzinfo=<isodate.tzinfo.Utc object at 0x7fc409d9df98>),
     '_value_1': None
 }"
 PullMessages,Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)
@@ -1226,7 +1054,7 @@ GetConfigurations,"[{
             'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
         }
     },
-    'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+    'DefaultPTZTimeout': datetime.timedelta(0, 600),
     'PanTiltLimits': None,
     'ZoomLimits': None,
     'Extension': None,

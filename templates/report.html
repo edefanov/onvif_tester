@@ -31,12 +31,33 @@ $(function() {
            style='padding-top: 20px;'>
     
       <table id = "t" style="width: auto" class="table table-bordered">
- {% block body %}
-    {{ data|safe }}
-    {% endblock %}  
+{% set count = [] %}
+{% for dat in data %}
+{% if count.append(1) %} {% endif %}
+    <tr>
+        <td>{{ dat[0] }}</td>
+        <td>{% if '{' in dat[1] %}
+        
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+    View Full
+  </a>
+          <div class="collapse" id="viewFull{{count|length}}">
+          <!-- <div class="card card-body"> -->
+            {{ dat[1] }}
+          <!-- </div> -->
+          </div>
+        
+        {% else %}
+        
+        {{ dat[1] }}
+        
+        {% endif %}</td>
+    </tr>
+{% endfor %}
 </table>
 
-</div>   
+</div>
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   </body>

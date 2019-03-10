@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, jsonify
 import os
 import time
 import calendar
 import csv
-import tablib
 import ast
 from multiprocessing import Process
 import sys
@@ -41,9 +40,6 @@ def tracking_on(id):
     conf.write_to_file()
     testClass = test.Tester()
     testClass.main()
-    #testerMain = Process(target=Tester.main, name='testMain', args=(sys.argv))
-    #testerMain.start()
-    #print('TrackingMain PID = ', trackingMain.pid) 
     return 'OK!  def tracking_on'
 
 def tracking_off(id):
@@ -52,19 +48,6 @@ def tracking_off(id):
         conf.dct['IP'] = str(camera)
         conf.dct['on'] = False
         conf.write_to_file()
-        import pids
-        #listOfProc = pids.pIDs
-        #for i in range(len(listOfProc)):
-            #os.system('pkill -TERM -P {}'.format(listOfProc[i]))
-            #print("killed proccess pid = ", listOfProc[i])
-        #procID = trackingMain.pid
-        #os.system('pkill -TERM -P {}'.format(procID))
-        #trackingMain.terminate()
-        #print("killed pid = ", procID)
-        path = os.getcwd() + '/pids.py'
-        pidF = open(path, 'w')
-        pidF.write('pIDs = []')
-        pidF.close()
     except:
         return 'unable to kill - no proccess'
     return 'OK!  def tracking_off'
@@ -164,28 +147,22 @@ def refresh():
 @app.route('/set_on')
 def set_on():
     print(tracking_on(request.args['id']))
-    print('hi', request.args['id'])
-    return ' '
+    return jsonify(dict(status='finished'))
 
 @app.route('/set_off')
 def set_off():
     print(tracking_off(request.args['id']))
-    print('hi', request.args['id'])
     return ' '
 
 @app.route('/viewfull/<id>')
 def view_full(id):
     import settings
-    #print(request.args['id'])
     idd = ast.literal_eval(id)
-    dataset = tablib.Dataset()
     fname = str(settings.cameras[idd][0]) + '.csv'
     fname2 = '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
     fpath = os.getcwd() + '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
-    with open(fpath) as f:
-        dataset.csv = f.read()
-    print(fpath)
-    data = dataset.html
+    with open(fpath) as csv_file:
+        data = list(csv.reader(csv_file))
     return render_template('report.html', data=data, id=idd)
     
 @app.route('/download/<id>')
@@ -198,5 +175,5 @@ def download(id):
     return send_file(fpath, as_attachment=True)
    
 if __name__ == '__main__':
-    #app.run(host='127.0.0.1')
-    app.run(host='192.168.11.103')
+    app.run(host='127.0.0.1')
+    #app.run(host='192.168.11.104')

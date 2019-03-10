@@ -1,5 +1,5 @@
-Device IP,192.168.11.23
-Test Performed,2019-03-10 23:07:32
+Device IP,192.168.11.25
+Test Performed,2019-03-10 23:06:39
 DeviceMgmt,True
 DeviceIO,False
 Events,False
@@ -22,9 +22,9 @@ GetSystemDateAndTime,"{
     },
     'UTCDateTime': {
         'Time': {
-            'Hour': 20,
-            'Minute': 22,
-            'Second': 18
+            'Hour': 21,
+            'Minute': 12,
+            'Second': 38
         },
         'Date': {
             'Year': 2019,
@@ -34,14 +34,14 @@ GetSystemDateAndTime,"{
     },
     'LocalDateTime': {
         'Time': {
-            'Hour': 23,
-            'Minute': 22,
-            'Second': 18
+            'Hour': 0,
+            'Minute': 12,
+            'Second': 38
         },
         'Date': {
             'Year': 2019,
             'Month': 3,
-            'Day': 10
+            'Day': 11
         }
     },
     'Extension': None,
@@ -81,7 +81,7 @@ GetDNS,"{
     'DNSManual': [
         {
             'Type': 'IPv4',
-            'IPv4Address': '192.168.11.1',
+            'IPv4Address': '192.168.11.2',
             'IPv6Address': None
         }
     ],
@@ -118,7 +118,7 @@ GetNetworkInterfaces,"[{
     'Enabled': True,
     'Info': {
         'Name': 'eth0',
-        'HwAddress': '58:04:CB:00:D1:2E',
+        'HwAddress': '58:04:CB:00:D6:AF',
         'MTU': 1500
     },
     'Link': None,
@@ -127,13 +127,13 @@ GetNetworkInterfaces,"[{
         'Config': {
             'Manual': [
                 {
-                    'Address': '192.168.11.23',
+                    'Address': '192.168.11.25',
                     'PrefixLength': 24
                 }
             ],
             'LinkLocal': None,
             'FromDHCP': {
-                'Address': '192.168.11.23',
+                'Address': '192.168.11.25',
                 'PrefixLength': 24
             },
             'DHCP': False,
@@ -153,7 +153,7 @@ GetNTP,"{
     'NTPManual': [
         {
             'Type': 'IPv4',
-            'IPv4Address': '0.0.0.0',
+            'IPv4Address': 'time.windows.com',
             'IPv6Address': None,
             'DNSname': None,
             'Extension': None,
@@ -177,7 +177,7 @@ GetVideoSources,"[{
             'Level': 0.0
         },
         'Brightness': 50.0,
-        'ColorSaturation': 60.0,
+        'ColorSaturation': 50.0,
         'Contrast': 50.0,
         'Exposure': {
             'Mode': 'AUTO',
@@ -250,8 +250,8 @@ GetAudioEncoderConfigurationOptions,"{
 }"
 GetVideoEncoderConfigurationOptions,"{
     'QualityRange': {
-        'Min': 0,
-        'Max': 5
+        'Min': 6,
+        'Max': 14
     },
     'JPEG': {
         'ResolutionsAvailable': [
@@ -303,8 +303,8 @@ GetVideoEncoderConfigurationOptions,"{
     },
     'Extension': {
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7f96d01c5b48>,
-            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7f96d01c5e48>
+            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7f4656f22508>,
+            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7f4656f225c8>
         ],
         'JPEG': None,
         'MPEG4': None,
@@ -317,7 +317,7 @@ GetProfiles,"[{
     'Name': 'mainStream',
     'VideoSourceConfiguration': {
         'Name': 'vscname_1',
-        'UseCount': 3,
+        'UseCount': 4,
         'SourceToken': 'videosource_1',
         'Bounds': {
             'x': 0,
@@ -340,11 +340,11 @@ GetProfiles,"[{
             'Width': 1920,
             'Height': 1080
         },
-        'Quality': 0.0,
+        'Quality': 6.0,
         'RateControl': {
             'FrameRateLimit': 25,
             'EncodingInterval': 1,
-            'BitrateLimit': 3000
+            'BitrateLimit': 3282
         },
         'MPEG4': None,
         'H264': {
@@ -385,7 +385,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01ccf08>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f4656f2ff88>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -458,7 +458,7 @@ GetProfiles,"[{
                 'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
             }
         },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+        'DefaultPTZTimeout': datetime.timedelta(0, 600),
         'PanTiltLimits': None,
         'ZoomLimits': None,
         'Extension': None,
@@ -495,7 +495,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f96d01d1b08>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f4656f30d88>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -512,7 +512,7 @@ GetProfiles,"[{
     'Name': 'subStream',
     'VideoSourceConfiguration': {
         'Name': 'vscname_1',
-        'UseCount': 3,
+        'UseCount': 4,
         'SourceToken': 'videosource_1',
         'Bounds': {
             'x': 0,
@@ -535,15 +535,15 @@ GetProfiles,"[{
             'Width': 704,
             'Height': 576
         },
-        'Quality': 0.0,
+        'Quality': 6.0,
         'RateControl': {
-            'FrameRateLimit': 6,
+            'FrameRateLimit': 4,
             'EncodingInterval': 1,
-            'BitrateLimit': 1000
+            'BitrateLimit': 2500
         },
         'MPEG4': None,
         'H264': {
-            'GovLength': 6,
+            'GovLength': 1,
             'H264Profile': 'Baseline'
         },
         'Multicast': {
@@ -580,7 +580,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01cc488>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f4656f34208>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -653,7 +653,7 @@ GetProfiles,"[{
                 'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
             }
         },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+        'DefaultPTZTimeout': datetime.timedelta(0, 600),
         'PanTiltLimits': None,
         'ZoomLimits': None,
         'Extension': None,
@@ -690,7 +690,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f96d01d6448>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f4656f36348>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -707,7 +707,7 @@ GetProfiles,"[{
     'Name': 'trackingProfile',
     'VideoSourceConfiguration': {
         'Name': 'vscname_1',
-        'UseCount': 3,
+        'UseCount': 4,
         'SourceToken': 'videosource_1',
         'Bounds': {
             'x': 0,
@@ -730,15 +730,15 @@ GetProfiles,"[{
             'Width': 704,
             'Height': 576
         },
-        'Quality': 0.0,
+        'Quality': 6.0,
         'RateControl': {
-            'FrameRateLimit': 6,
+            'FrameRateLimit': 4,
             'EncodingInterval': 1,
-            'BitrateLimit': 1000
+            'BitrateLimit': 2500
         },
         'MPEG4': None,
         'H264': {
-            'GovLength': 6,
+            'GovLength': 1,
             'H264Profile': 'Baseline'
         },
         'Multicast': {
@@ -775,7 +775,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f96d01d7508>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f4656f38408>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -848,7 +848,7 @@ GetProfiles,"[{
                 'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
             }
         },
-        'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+        'DefaultPTZTimeout': datetime.timedelta(0, 600),
         'PanTiltLimits': None,
         'ZoomLimits': None,
         'Extension': None,
@@ -990,7 +990,7 @@ GetOptions,"{
 GetImagingSettings,"{
     'BacklightCompensation': None,
     'Brightness': 50.0,
-    'ColorSaturation': 60.0,
+    'ColorSaturation': 50.0,
     'Contrast': 50.0,
     'Exposure': None,
     'Focus': {
@@ -1072,7 +1072,7 @@ GetServiceCapabilities,"{
 CreatePullPointSubscription,"{
     'SubscriptionReference': {
         'Address': {
-            '_value_1': 'http://192.168.11.23:80/onvif/Subscription?Idx=0',
+            '_value_1': 'http://192.168.11.25:80/onvif/Subscription?Idx=0',
             '_attr_1': None
         },
         'ReferenceParameters': None,
@@ -1080,8 +1080,8 @@ CreatePullPointSubscription,"{
         '_value_1': None,
         '_attr_1': None
     },
-    'CurrentTime': datetime.datetime(2019, 3, 10, 23, 22, 27, tzinfo=<isodate.tzinfo.Utc object at 0x7f96d331df98>),
-    'TerminationTime': datetime.datetime(2019, 3, 10, 23, 23, 27, tzinfo=<isodate.tzinfo.Utc object at 0x7f96d331df98>),
+    'CurrentTime': datetime.datetime(2019, 3, 11, 0, 12, 47, tzinfo=<isodate.tzinfo.Utc object at 0x7f465de9df98>),
+    'TerminationTime': datetime.datetime(2019, 3, 11, 0, 13, 47, tzinfo=<isodate.tzinfo.Utc object at 0x7f465de9df98>),
     '_value_1': None
 }"
 PullMessages,Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)
@@ -1226,7 +1226,7 @@ GetConfigurations,"[{
             'space': 'http://www.onvif.org/ver10/tptz/ZoomSpaces/ZoomGenericSpeedSpace'
         }
     },
-    'DefaultPTZTimeout': datetime.timedelta(0, 0, 15000),
+    'DefaultPTZTimeout': datetime.timedelta(0, 600),
     'PanTiltLimits': None,
     'ZoomLimits': None,
     'Extension': None,
