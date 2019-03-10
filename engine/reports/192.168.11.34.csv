@@ -1,5 +1,5 @@
 Device IP,192.168.11.34
-Test Performed,2019-03-10 22:36:45
+Test Performed,2019-03-11 01:40:56
 DeviceMgmt,True
 DeviceIO,False
 Events,False
@@ -22,9 +22,9 @@ GetSystemDateAndTime,"{
     },
     'UTCDateTime': {
         'Time': {
-            'Hour': 19,
-            'Minute': 52,
-            'Second': 36
+            'Hour': 22,
+            'Minute': 56,
+            'Second': 45
         },
         'Date': {
             'Year': 2019,
@@ -34,14 +34,14 @@ GetSystemDateAndTime,"{
     },
     'LocalDateTime': {
         'Time': {
-            'Hour': 22,
-            'Minute': 52,
-            'Second': 36
+            'Hour': 1,
+            'Minute': 56,
+            'Second': 45
         },
         'Date': {
             'Year': 2019,
             'Month': 3,
-            'Day': 10
+            'Day': 11
         }
     },
     'Extension': None,
@@ -50,9 +50,22 @@ GetSystemDateAndTime,"{
 GetDiscoveryMode,NonDiscoverable
 SetDiscoveryMode,Supported
 GetRemoteDiscoveryMode,Discoverable
-GetUsers,Not Supported
-SetUser,Unable to test due to unavailability of GetUsers() method
-DeleteUsers,Unable to test due to unavailability of GetUsers() method
+GetUsers,"[{
+    'Username': 'admin',
+    'Password': None,
+    'UserLevel': 'Administrator',
+    'Extension': None,
+    '_attr_1': None
+}, {
+    'Username': 'Operator',
+    'Password': None,
+    'UserLevel': 'Operator',
+    'Extension': None,
+    '_attr_1': None
+}]"
+CreateUsers,Supported
+SetUser,Supported
+DeleteUsers,Supported
 GetHostname,"{
     'FromDHCP': False,
     'Name': 'null',
@@ -290,8 +303,8 @@ GetVideoEncoderConfigurationOptions,"{
     },
     'Extension': {
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7fc4030623c8>,
-            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7fc4030626c8>
+            <Element {http://www.onvif.org/ver10/schema}JPEG at 0x7f05cc523bc8>,
+            <Element {http://www.onvif.org/ver10/schema}H264 at 0x7f05cc525948>
         ],
         'JPEG': None,
         'MPEG4': None,
@@ -372,7 +385,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7fc403069288>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f05cc52fc48>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -482,7 +495,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7fc40306c708>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f05cc4b1408>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -567,7 +580,7 @@ GetProfiles,"[{
                         ],
                         'ElementItem': [
                             {
-                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7fc40306e8c8>,
+                                '_value_1': <Element {http://www.onvif.org/ver10/schema}CellLayout at 0x7f05cc4b3d08>,
                                 'Name': 'Layout'
                             }
                         ],
@@ -677,7 +690,7 @@ GetProfiles,"[{
         },
         'SessionTimeout': datetime.timedelta(0, 60),
         '_value_1': [
-            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7fc40306d608>
+            <Element {http://www.onvif.org/ver10/schema}AnalyticsEngineConfiguration at 0x7f05cc4b50c8>
         ],
         'AnalyticsEngineConfiguration': None,
         'Extension': None,
@@ -908,8 +921,8 @@ CreatePullPointSubscription,"{
         '_value_1': None,
         '_attr_1': None
     },
-    'CurrentTime': datetime.datetime(2019, 3, 10, 22, 52, 43, tzinfo=<isodate.tzinfo.Utc object at 0x7fc409d9df98>),
-    'TerminationTime': datetime.datetime(2019, 3, 10, 22, 53, 43, tzinfo=<isodate.tzinfo.Utc object at 0x7fc409d9df98>),
+    'CurrentTime': datetime.datetime(2019, 3, 11, 1, 56, 56, tzinfo=<isodate.tzinfo.Utc object at 0x7f05cf61df98>),
+    'TerminationTime': datetime.datetime(2019, 3, 11, 1, 57, 56, tzinfo=<isodate.tzinfo.Utc object at 0x7f05cf61df98>),
     '_value_1': None
 }"
 PullMessages,Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)

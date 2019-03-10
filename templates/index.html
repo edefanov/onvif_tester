@@ -7,8 +7,12 @@
                 {% for id in ids %}
                 document.getElementById("ON_{{id}}").disabled = true;
                 {% endfor %}
+                
+            
             $.getJSON('/set_on', {'id': {{id}}}, function(data) { if (data.status == 'finished') {location.reload(1)} });
+            $('#exampleModalCenter').modal('show')
             console.log('set on')
+            
           });
           
            $("#viewReport_{{id}}").click( function() {
@@ -24,17 +28,122 @@
     
 <html lang="en">
   <head>
+  <style>
+</style>
+    
+  
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    
     <title>Devices</title>
   </head>
 
   <body> 
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="col-12 modal-title text-center">Testing</h5>
+      </div>
+      <div class="modal-body">
+      <div class="lds-css ng-scope" align="center">
+<div class="lds-gear" style="width:100%;height:100%"><div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+<style type="text/css">@keyframes lds-gear {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes lds-gear {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.lds-gear > div {
+  -webkit-transform-origin: 100px 100px;
+  transform-origin: 100px 100px;
+  -webkit-animation: lds-gear 5.1s infinite linear;
+  animation: lds-gear 5.1s infinite linear;
+  position: relative;
+}
+.lds-gear > div div {
+  position: absolute;
+  width: 26px;
+  height: 192px;
+  background: #b5ccf1;
+  left: 100px;
+  top: 100px;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.lds-gear > div div:nth-child(1) {
+  width: 152px;
+  height: 152px;
+  border-radius: 50%;
+}
+.lds-gear > div div:nth-child(3) {
+  -webkit-transform: translate(-50%, -50%) rotate(30deg);
+  transform: translate(-50%, -50%) rotate(30deg);
+}
+.lds-gear > div div:nth-child(4) {
+  -webkit-transform: translate(-50%, -50%) rotate(60deg);
+  transform: translate(-50%, -50%) rotate(60deg);
+}
+.lds-gear > div div:nth-child(5) {
+  -webkit-transform: translate(-50%, -50%) rotate(90deg);
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.lds-gear > div div:nth-child(6) {
+  -webkit-transform: translate(-50%, -50%) rotate(120deg);
+  transform: translate(-50%, -50%) rotate(120deg);
+}
+.lds-gear > div div:nth-child(7) {
+  -webkit-transform: translate(-50%, -50%) rotate(150deg);
+  transform: translate(-50%, -50%) rotate(150deg);
+}
+.lds-gear > div div:nth-child(8) {
+  width: 80px;
+  height: 80px;
+  background: #fff;
+  border-radius: 50%;
+}
+.lds-gear {
+  width: 84px !important;
+  height: 84px !important;
+  -webkit-transform: translate(-42px, -42px) scale(0.42) translate(42px, 42px);
+  transform: translate(-42px, -42px) scale(0.42) translate(42px, 42px);
+}
+</style></div> <br>
+        <h3 class="text-center">The page will refresh once the test is completed.</h3>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  
+  
+  
     <div class="col-lg"
            style='padding-top: 20px;'>
 <h3>Discovered {{N}} devices</h3> <form action="/discover" method="post"> <button type="submit" class="btn btn-warning" id="rediscover">Refresh Discovery</button></form>
@@ -63,9 +172,8 @@
         {% else %}
         Last Test Performed: 
         {{summary[id][0][1]}} <br>
-          <p>  <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#summaryCollapse{{id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-    Summary
-  </a><button type="button" class="btn btn-secondary btn-sm" id="viewReport_{{id}}">Full Report</button></p>
+          <p><a class="btn btn-primary btn-sm" data-toggle="collapse" href="#summaryCollapse{{id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Summary</a>
+          <button type="button" class="btn btn-secondary btn-sm" id="viewReport_{{id}}">Full Report</button></p>
   <div class="collapse" id="summaryCollapse{{id}}">
   <div class="card card-body">
   <table class="table table-bordered">
