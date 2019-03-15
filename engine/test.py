@@ -14,7 +14,7 @@ class Tester:
 
     # bandaid fix for broken zeep module
     
-    # алармы нужны, птз абсолют мув, имеджинг (фокус важный момент, режим + возвращаемое значение), на аналитику забить, стриминг, профили медиа (на аудио обратить внимание, поддержка аас), нетворк (дхцп и все такое, но возможность менять не проверять)
+    # птз абсолют мув, имеджинг (фокус важный момент, режим + возвращаемое значение), на аналитику забить, стриминг, профили медиа (на аудио обратить внимание, поддержка аас), нетворк (дхцп и все такое, но возможность менять не проверять)
 
     def zeep_pythonvalue(self, xmlvalue):
         return xmlvalue
@@ -25,7 +25,10 @@ class Tester:
         
         logging.basicConfig(filename=logpath, level=logging.DEBUG)
         
-        #sys.stdout = open(os.getcwd() + '/engine/utils/error.txt', 'w')
+        logging.debug('test log')
+        
+        #sys.stdout = open(logpath, 'w')
+        #sys.stderr = open(logpath, 'w')
         
         # reading config
         
@@ -164,17 +167,23 @@ class Tester:
             sleep(0.5)
             
             if testBuffer == 'Discoverable':
-                dmgmt.SetDiscoveryMode('NonDiscoverable')
-                testBuffer = str(dmgmt.GetDiscoveryMode())
-                if testBuffer == 'NonDiscoverable':
-                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
-                    dmgmt.SetDiscoveryMode(testBuffer2)
+                try:
+                    dmgmt.SetDiscoveryMode('NonDiscoverable')
+                    testBuffer = str(dmgmt.GetDiscoveryMode())
+                    if testBuffer == 'NonDiscoverable':
+                        dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
+                        dmgmt.SetDiscoveryMode(testBuffer2)
+                except:
+                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
             elif testBuffer == 'NonDiscoverable':
-                dmgmt.SetDiscoveryMode('Discoverable')
-                testBuffer = str(dmgmt.GetDiscoveryMode())
-                if testBuffer == 'Discoverable':
-                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
-                    dmgmt.SetDiscoveryMode(testBuffer2)
+                try:
+                    dmgmt.SetDiscoveryMode('Discoverable')
+                    testBuffer = str(dmgmt.GetDiscoveryMode())
+                    if testBuffer == 'Discoverable':
+                        dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
+                        dmgmt.SetDiscoveryMode(testBuffer2)
+                except:
+                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
             
             sleep(0.5)
             
@@ -205,11 +214,19 @@ class Tester:
             except:
                 print('no onviftester')
             
-            sleep(1)
+            sleep(0.5)
             dmgmt = mycam.create_devicemgmt_service()
             
             try:
-                testBuffer = str(dmgmt.GetUsers())
+                testBuffer2 = dmgmt.GetUsers()
+                try:
+                    testBuffer = str(testBuffer2)
+                except:
+                    logging.exception('could not convert get users to string!')
+                    testBuffer = 'Supported'
+            except zeep.exceptions.Fault:
+                testBuffer = "Supported"
+                logging.exception('get users2')
             except:
                 testBuffer = "Not Supported"
                 logging.exception('get users')
@@ -230,15 +247,15 @@ class Tester:
             if "Not Supported" not in testBuffer:
                 try:
                 
-                    testBuffer2 = dmgmt.GetUsers()
-                    NewUser = testBuffer2[0]
-                    NewUser.Username = 'O1N2V3IFTester'
-                    NewUser.Password = 'Tester4444'
-                    NewUser.UserLevel = 'User'
+                    #testBuffer2 = dmgmt.GetUsers()
+                    #NewUser = testBuffer2[0]
+                    #NewUser.Username = 'O1N2V3IFTester'
+                    #NewUser.Password = 'Tester4444'
+                    #NewUser.UserLevel = 'User'
+                    NewUser = {'Username': 'O1N2V3IFTester', 'Password':'Tester4444', 'UserLevel': 'User'}
                     print(NewUser)
                     dmgmt.CreateUsers(NewUser)
-                    sleep(1)
-                    dmgmt = mycam.create_devicemgmt_service()
+                    sleep(2)
                     testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
                     print(testBuffer2)
                     if testBuffer2.Username == 'O1N2V3IFTester':
@@ -247,24 +264,29 @@ class Tester:
                     else:
                         testBuffer = "Not Supported"
                         dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]] 
+                except zeep.exceptions.Fault:
+                    testBuffer = "Supported"
                 except:
                     testBuffer = "Not Supported"
-                    logging.error('create user')
+                    logging.exception('create user')
                     dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]] 
                 
                 sleep(1)
                 
                 if testBuffer == 'Supported':
                     try:
-                        NewUser.UserLevel = 'Operator'
+                        NewUser['UserLevel'] = 'Operator'
                         dmgmt.SetUser(NewUser)
+                        sleep(2)
                         testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
                         if testBuffer2.UserLevel == 'Operator':
                             testBuffer = 'Supported'
                             dmgmtResult = dmgmtResult + [['SetUser', testBuffer]]
                         else:
                             testBuffer = "Not Supported"
-                            dmgmtResult = dmgmtResult + [['SetUser', testBuffer]] 
+                            dmgmtResult = dmgmtResult + [['SetUser', testBuffer]]
+                    except zeep.exceptions.Fault:
+                        testBuffer = "Supported"
                     except:
                         testBuffer = "Not Supported"
                         logging.exception('set user')
@@ -274,6 +296,7 @@ class Tester:
                     
                     try:
                         dmgmt.DeleteUsers('O1N2V3IFTester')
+                        sleep(2)
                         testBuffer2 = dmgmt.GetUsers()[len(dmgmt.GetUsers())-1]
                         if testBuffer2.Username != 'O1N2V3IFTester':
                             testBuffer = 'Supported'
@@ -281,6 +304,8 @@ class Tester:
                         else:
                             testBuffer = "Not Supported"
                             dmgmtResult = dmgmtResult + [['DeleteUsers', testBuffer]] 
+                    except zeep.exceptions.Fault:
+                        testBuffer = "Supported"
                     except:
                         testBuffer = "Not Supported"
                         logging.exception('delete users')
@@ -292,17 +317,19 @@ class Tester:
                 dmgmtResult = dmgmtResult + [['SetUser', 'Unable to test due to unavailability of GetUsers() method']] 
                 dmgmtResult = dmgmtResult + [['DeleteUsers', 'Unable to test due to unavailability of GetUsers() method']] 
             
-            sleep(1)
+            sleep(0.5)
             
             try:
-                testBuffer = str(dmgmt.GetHostname())
+                testBuffer2 = dmgmt.GetHostname()
+                testBuffer = str(testBuffer2)
                 #print("gethostname   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
+                logging.exception('gethostname')
                 #print("gethostname   ", testBuffer)
             dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
             
-            sleep(1)
+            sleep(0.5)
             
             try:
                 testBuffer = str(dmgmt.GetDNS())
@@ -371,11 +398,19 @@ class Tester:
             mediaResult = mediaResult + [['GetVideoEncoderConfigurationOptions', testBuffer2]]
             
             try:
-                testBuffer2 = str(media.GetProfiles())
+                profileToken = media.GetProfiles()[0].token
+                testBuffer2 = media.GetProfiles()
                 GetProfilesF = True
             except:
                 testBuffer2 = "Not Supported"
             mediaResult = mediaResult + [['GetProfiles', testBuffer2]]
+            
+            try:
+                testBuffer2 = str(media.GetStreamUri({'StreamSetup': {'Stream': 'RTP-Unicast', 'Transport': 'UDP'}, 'ProfileToken': profileToken}))
+            except:
+                testBuffer2 = "Not Supported"
+                logging.exception('stream uri')
+            mediaResult = mediaResult + [['GetStreamUri', testBuffer2]]
         
         ####################################
         #   testing imaging service block  #
@@ -384,21 +419,35 @@ class Tester:
         if imagingF:
             imagingResult = None
             try:
-                testBuffer = str(imaging.GetOptions(vSourceToken))
-                testBuffer2 = testBuffer
+                iOptions = imaging.GetOptions(vSourceToken)
+                testBuffer = str(iOptions)
             except:
+                logging.exception(' ')
                 testBuffer = "Not Supported"
             imagingResult = [['GetOptions', testBuffer]]
             
             try:
                 testBuffer = str(imaging.GetImagingSettings(vSourceToken))
             except:
+                logging.exception(' ')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetImagingSettings', testBuffer]]
+            
+            if 'MANUAL' in iOptions.Focus.AutoFocusModes:
+                try:
+                    iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'MANUAL'}}}
+                    imaging.SetImagingSettings(iset)
+                    if imaging.GetImagingSettings(vSourceToken).Focus.AutoFocusMode == 'MANUAL':
+                        testBuffer = 'Supported'
+                except:
+                    testBuffer = "Not Supported"
+                    logging.exception('set imaging settings')
+                imagingResult = imagingResult + [['SetImagingSettings', testBuffer]]
             
             try:
                 testBuffer = str(imaging.GetMoveOptions(vSourceToken))
             except:
+                logging.exception(' ')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetMoveOptions', testBuffer]]
             
@@ -410,15 +459,38 @@ class Tester:
                 else:
                     getiStatusF = [1]
             except:
+                logging.exception(' ')
                 testBuffer2 = "Not Supported"
             imagingResult = imagingResult + [['GetStatus', testBuffer2]]
             
-            #if 'MANUAL' in testBuffer2.Focus.AutoFocusModes:
-            #    try:
-            #        testBuffer2 
-            #    except:
-            #        testBuffer = "Not Supported"
-            #    imagingResult = [['GetImagingSettings', testBuffer]]
+            if 'MANUAL' in iOptions.Focus.AutoFocusModes:    
+                try:
+                    moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': 1.0}}}
+                    imaging.Move(moveSet)
+                    sleep(1.5)
+                    testBuffer = str(imaging.GetStatus(vSourceToken))
+                    imaging.Stop(vSourceToken)
+                except:
+                    logging.exception('manual focus move')
+                    testBuffer = "Couldn't get GetStatus response"
+                imagingResult = imagingResult + [['GetStatus (after manually moving focus forward)', testBuffer]]
+                
+                try:
+                    moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': -1.0}}}
+                    imaging.Move(moveSet)
+                    sleep(1.5)
+                    testBuffer = str(imaging.GetStatus(vSourceToken))
+                    imaging.Stop(vSourceToken)
+                except:
+                    logging.exception('manual focus move')
+                    testBuffer = "Couldn't get GetStatus response"
+                imagingResult = imagingResult + [['GetStatus (after manually moving focus backwards)', testBuffer]]
+                    
+            try:
+                iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}}
+                imaging.SetImagingSettings(iset)
+            except:
+                logging.exception('set autofocus back')     
         
         ####################################
         #   testing events service block   #
@@ -567,7 +639,136 @@ class Tester:
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
                 ptzResult = ptzResult + [['RelativeMove', testBuffer]]
-            #elif getStatusF == [0, 1]:   
+            elif getStatusF == [0, 1]:
+                # continuous move test if only position is available
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.2, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    statusInit = ptz.GetStatus(mediaToken)
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': -0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.Position == statusDuring1.Position and statusInit.Position == statusDuring2.Position:
+                        testBuffer = "Not Supported - coordinates didn't change after moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
+                
+                # absolute move test if only position is available
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    statusInit = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0'}, 'PanTilt': {'x': 1, 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(2)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0'}, 'PanTilt': {'x': 0.5, 'y': -1}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(2)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.Position == statusDuring1.Position and statusInit.Position == statusDuring2.Position:
+                        testBuffer = "Not Supported - coordinates didn't change after moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                    logging.exception('abs move pos')
+                ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
+            elif getStatusF == [1, 0]:
+                # continuous move test if only status is available
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.2, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    statusInit = ptz.GetStatus(mediaToken)
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': -0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.MoveStatus == statusDuring1.MoveStatus and statusInit.MoveStatus == statusDuring2.MoveStatus:
+                        testBuffer = "Not Supported - move status didn't change while moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
+                
+                # absolute move test if only move status is available
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    statusInit = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(1)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.5, 'space': '', 'y': -1}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(1)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.MoveStatus == statusDuring1.MoveStatus and statusInit.MoveStatus == statusDuring2.MoveStatus:
+                        testBuffer = "Not Supported - move status didn't change while moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
+            elif getStatusF == [1, 1]:
+                # continuous move test using move status
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.2, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    statusInit = ptz.GetStatus(mediaToken)
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': -0.1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.ContinuousMove(req)
+                    sleep(1.5)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.MoveStatus == statusDuring1.MoveStatus and statusInit.MoveStatus == statusDuring2.MoveStatus:
+                        testBuffer = "Not Supported - move status didn't change while moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
+                
+                # absolute move test using position
+                try:
+                    mediaToken = media.GetProfiles()[0].token
+                    statusInit = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 1, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(2)
+                    statusDuring1 = ptz.GetStatus(mediaToken)
+                    req = {'Position': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.5, 'space': '', 'y': -1}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(2)
+                    statusDuring2 = ptz.GetStatus(mediaToken)
+                    ptz.Stop(mediaToken)
+                    if statusInit.Position == statusDuring1.Position and statusInit.Position == statusDuring2.Position:
+                        testBuffer = "Not Supported - coordinates didn't change after moving"
+                    else:
+                        testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
         
         date = str(datetime.datetime.now())
         date = date.split('.')
@@ -580,15 +781,19 @@ class Tester:
             writer = csv.writer(csvFile)
             writer.writerows(header)
             writer.writerows(summary)
-            writer.writerows(spacer)
-            #writer.writerows(header2)
-            writer.writerows(dmgmtResult)
-            writer.writerows(spacer)
-            writer.writerows(mediaResult)
-            writer.writerows(spacer)
-            writer.writerows(imagingResult)
-            writer.writerows(spacer)
-            writer.writerows(eventResult)
-            writer.writerows(spacer)
-            writer.writerows(ptzResult)
+            if dmgmtF:
+                writer.writerows([['testdmgmt', '']])
+                writer.writerows(dmgmtResult)
+            if mediaF:
+                writer.writerows([['testmedia', '1']])
+                writer.writerows(mediaResult)
+            if imagingF:
+                writer.writerows([['testimg', '1']])
+                writer.writerows(imagingResult)
+            if eventsF:
+                writer.writerows([['testevents', '1']])
+                writer.writerows(eventResult)
+            if ptzF:
+                writer.writerows([['testptz', '1']])
+                writer.writerows(ptzResult)
         csvFile.close()    

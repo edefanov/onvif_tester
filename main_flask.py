@@ -163,6 +163,9 @@ def view_full(id):
     fpath = os.getcwd() + '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
     with open(fpath) as csv_file:
         data = list(csv.reader(csv_file))
+        for idx, item in enumerate(data):
+            if '\n' in item[1]:
+                data[idx][1] = data[idx][1].replace('\n', '<br/>')
     return render_template('report.html', data=data, id=idd)
     
 @app.route('/download/<id>')
@@ -175,5 +178,5 @@ def download(id):
     return send_file(fpath, as_attachment=True)
    
 if __name__ == '__main__':
-    app.run(host='127.0.0.1')
-    #app.run(host='192.168.11.104')
+    #app.run(host='127.0.0.1')
+    app.run(host='192.168.11.211')

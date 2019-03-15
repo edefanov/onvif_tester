@@ -34,25 +34,63 @@ $(function() {
 {% set count = [] %}
 {% for dat in data %}
 {% if count.append(1) %} {% endif %}
+
+    {% if 'testdmgmt' in dat[0] %}
     <tr>
+    <td>
+    <br>
+    <h3> Device Management </h3>
+    <br>
+    </td>
+    </tr>
+    {% elif 'testmedia' in dat[0] %}
+    
+    <tr><td><br>
+    <h3> Media </h3>
+    <br></td></tr>
+    
+    {% elif 'testimg' in dat[0] %}
+    
+    <tr><td><br>
+    <h3> Imaging </h3>
+    <br></td></tr>
+    
+    {% elif 'testevents' in dat[0] %}
+
+    <tr><td><br>
+    <h3> Events </h3>
+    <br></td></tr>
+    
+    {% elif 'testptz' in dat[0] %}
+    
+    <tr><td><br>
+    <h3> PTZ </h3>
+    <br></td></tr>
+    
+    {% else %}
+    
+    <tr>
+        
+        
+        
+        
+        
         <td>{{ dat[0] }}</td>
         <td>{% if '{' in dat[1] %}
         
-        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-    View Full
-  </a>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
           <div class="collapse" id="viewFull{{count|length}}">
-          <!-- <div class="card card-body"> -->
-            {{ dat[1] }}
-          <!-- </div> -->
+            <pre>{{ dat[1] | safe }}</pre>
           </div>
         
         {% else %}
         
-        {{ dat[1] }}
+            {{ dat[1] }}
         
-        {% endif %}</td>
-    </tr>
+        {% endif %} </td></tr>
+        
+    {% endif %}
+    
 {% endfor %}
 </table>
 
