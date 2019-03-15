@@ -83,6 +83,10 @@ $(function() {
             <pre>{{ dat[1] | safe }}</pre>
           </div>
         
+        {% elif '<br/>' in dat[1] %}
+        
+        <pre>{{ dat[1] | safe }}</pre>
+        
         {% else %}
         
             {{ dat[1] }}

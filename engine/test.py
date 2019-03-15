@@ -23,9 +23,13 @@ class Tester:
     
         logpath = os.getcwd() + '/engine/utils/log.txt'
         
-        logging.basicConfig(filename=logpath, level=logging.DEBUG)
+        for handler in logging.root.handlers[:]:
+            logging.root.removeHandler(handler)
         
-        logging.debug('test log')
+        logging.basicConfig(filename='tester.log', filemode='w', level=logging.INFO)
+        
+        logging.info('test log')
+        
         
         #sys.stdout = open(logpath, 'w')
         #sys.stderr = open(logpath, 'w')
@@ -71,6 +75,13 @@ class Tester:
         getiStatusF = None
         GetProfilesF = False
         vSourceToken = None
+        rToken = None
+        relayF = False
+        contMove = 'Not Supported'
+        absMove = 'Not Supported'
+        vCodecs = 'None'
+        aCodecs = 'None'
+        vResolutions = 'None'
         
         
         # trying out different services
@@ -121,7 +132,17 @@ class Tester:
                 testBuffer = str(dmgmt.GetDeviceInformation())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = [['GetDeviceInformation', testBuffer]]
+            
+            sleep(0.5)
+            
+            try:
+                testBuffer = str(dmgmt.GetDeviceCapabilities())
+            except:
+                testBuffer = "Not Supported"
+                logging.exception(' ')
+            dmgmtResult = dmgmtResult + [['GetDeviceCapabilities', testBuffer]]
             
             sleep(0.5)
             
@@ -129,6 +150,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetSystemLog())
             except:
                 testBuffer = "Not Supported Or Empty"
+                logging.exception(' ')
             dmgmtResult = [['GetSystemLog', testBuffer]]
             
             sleep(0.5)
@@ -137,6 +159,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]         
             
             sleep(0.5)
@@ -145,6 +168,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetEndpointReference())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetEndpointReference', testBuffer]]    
             
             sleep(0.5)
@@ -153,6 +177,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetSystemDateAndTime())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetSystemDateAndTime', testBuffer]]              
             
             sleep(0.5)
@@ -162,6 +187,7 @@ class Tester:
                 testBuffer2 = testBuffer
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetDiscoveryMode', testBuffer]]
             
             sleep(0.5)
@@ -175,6 +201,7 @@ class Tester:
                         dmgmt.SetDiscoveryMode(testBuffer2)
                 except:
                     dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
+                    logging.exception(' ')
             elif testBuffer == 'NonDiscoverable':
                 try:
                     dmgmt.SetDiscoveryMode('Discoverable')
@@ -184,7 +211,7 @@ class Tester:
                         dmgmt.SetDiscoveryMode(testBuffer2)
                 except:
                     dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
-            
+                    logging.exception(' ')
             sleep(0.5)
             
             try:
@@ -192,30 +219,42 @@ class Tester:
                 testBuffer2 = testBuffer
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]
 
             if testBuffer2 == 'Discoverable':
-                dmgmt.SetRemoteDiscoveryMode('NonDiscoverable')
-                testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
-                if testBuffer == 'NonDiscoverable':
-                    dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Supported']]
-                    dmgmt.SetRemoteDiscoveryMode(testBuffer2)
+                try:
+                    dmgmt.SetRemoteDiscoveryMode('NonDiscoverable')
+                    testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
+                    if testBuffer == 'NonDiscoverable':
+                        dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Supported']]
+                        dmgmt.SetRemoteDiscoveryMode(testBuffer2)
+                except:
+                    dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Not Supported']]
+                    logging.exception(' ')
             elif testBuffer2 == 'NonDiscoverable':
-                dmgmt.SetRemoteDiscoveryMode('Discoverable')
-                testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
-                if testBuffer == 'Discoverable':
-                    dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Supported']]
-                    dmgmt.SetRemoteDiscoveryMode(testBuffer2)
+                try:
+                    dmgmt.SetRemoteDiscoveryMode('Discoverable')
+                    testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
+                    if testBuffer == 'Discoverable':
+                        dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Supported']]
+                        dmgmt.SetRemoteDiscoveryMode(testBuffer2)
+                except:
+                    dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Not Supported']]
+                    logging.exception(' ')
             else:
                 dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Not Supported']]
             
             try:
                 dmgmt.DeleteUsers('O1N2V3IFTester')
             except:
-                print('no onviftester')
+                logging.info('no onviftester')
             
             sleep(0.5)
-            dmgmt = mycam.create_devicemgmt_service()
+            try:
+                dmgmt = mycam.create_devicemgmt_service()
+            except:
+                logging.exception(' ')
             
             try:
                 testBuffer2 = dmgmt.GetUsers()
@@ -287,6 +326,7 @@ class Tester:
                             dmgmtResult = dmgmtResult + [['SetUser', testBuffer]]
                     except zeep.exceptions.Fault:
                         testBuffer = "Supported"
+                        logging.exception(' ')
                     except:
                         testBuffer = "Not Supported"
                         logging.exception('set user')
@@ -306,6 +346,7 @@ class Tester:
                             dmgmtResult = dmgmtResult + [['DeleteUsers', testBuffer]] 
                     except zeep.exceptions.Fault:
                         testBuffer = "Supported"
+                        logging.exception(' ')
                     except:
                         testBuffer = "Not Supported"
                         logging.exception('delete users')
@@ -336,6 +377,7 @@ class Tester:
                 #print("getdns   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
                 #print("getdns   ", testBuffer)
             dmgmtResult = dmgmtResult + [['GetDNS', testBuffer]]
             
@@ -344,25 +386,76 @@ class Tester:
                 #print("getdynamicdns   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetDynamicDNS', testBuffer]]
             
             try:
                 testBuffer = str(dmgmt.GetNetworkProtocols())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNetworkProtocols', testBuffer]]
             
             try:
                 testBuffer = str(dmgmt.GetNetworkInterfaces())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNetworkInterfaces', testBuffer]]
             
             try:
                 testBuffer = str(dmgmt.GetNTP())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNTP', testBuffer]]
+            
+            sleep(0.5)
+            
+            try:
+                testBuffer = dmgmt.GetRelayOutputs()
+                testBuffer2 = str(testBuffer)
+                if len(testBuffer)>0:
+                    relayF = True
+            except:
+                testBuffer2 = "Not Supported"
+                logging.exception('get relay outputs')
+            dmgmtResult = dmgmtResult + [['GetRelayOutputs', testBuffer2]]
+            
+            if relayF:
+                try:
+                    rToken = dmgmt.GetRelayOutputs()[0].token
+                    rState = {'RelayOutputToken': rToken, 'LogicalState': 'active'}
+                    testBuffer = dmgmt.SetRelayOutputState(rState)
+                    testBuffer = "Supported"
+                except:
+                    testBuffer = "Not Supported"
+                    logging.exception('set relay output state')
+                dmgmtResult = dmgmtResult + [['SetRelayOutputState', testBuffer]]
+                
+                try:
+                    rToken = dmgmt.GetRelayOutputs()[0].token
+                    rIS = dmgmt.GetRelayOutputs()[0].Properties.IdleState
+                    if rIS == 'closed':
+                        rSettings = {'RelayOutputToken': rToken, 'Properties': {'Mode': 'Bistable', 'DelayTime': dmgmt.GetRelayOutputs()[0].Properties.DelayTime, 'IdleState': 'open'}}
+                        dmgmt.SetRelayOutputSettings(rSettings)
+                        sleep(0.5)
+                        if dmgmt.GetRelayOutputs()[0].Properties.IdleState == 'open':
+                            testBuffer = "Supported"
+                        else:
+                            testBuffer = "Not Supported"
+                    elif rIS == 'open':
+                        rSettings = {'RelayOutputToken': rToken, 'Properties': {'Mode': 'Bistable', 'DelayTime': dmgmt.GetRelayOutputs()[0].Properties.DelayTime, 'IdleState': 'closed'}}
+                        dmgmt.SetRelayOutputSettings(rSettings)
+                        sleep(0.5)
+                        if dmgmt.GetRelayOutputs()[0].Properties.IdleState == 'closed':
+                            testBuffer = "Supported"
+                        else:
+                            testBuffer = "Not Supported"
+                except:
+                    testBuffer = "Not Supported"
+                    logging.exception('set relay output settings')
+                dmgmtResult = dmgmtResult + [['SetRelayOutputSettings', testBuffer]]
             
         ####################################
         #   testing media service block    #
@@ -376,6 +469,7 @@ class Tester:
                 vSourceToken = testBuffer[0].token
             except:
                 testBuffer2 = "Not Supported"
+                logging.exception(' ')
             mediaResult = [['GetVideoSources', testBuffer2]]
             
             try:
@@ -383,18 +477,104 @@ class Tester:
                 testBuffer2 = str(testBuffer)
             except:
                 testBuffer2 = "Not Supported"
+                logging.exception(' ')
             mediaResult = mediaResult + [['GetAudioSources', testBuffer2]]
             
             try:
-                testBuffer2 = str(media.GetAudioEncoderConfigurationOptions())
+                testBuffer = media.GetAudioEncoderConfigurationOptions()
+                
+                # compiling a list of available codecs for summary
+                
+                aCodecs = ''
+                try:
+                    for x in testBuffer.Options:
+                        if aCodecs == '':
+                            aCodecs = str(x.Encoding)
+                        else:
+                            aCodecs = aCodecs + ', ' + str(x.Encoding)
+                except:
+                    logging.exception('couldnt find any audio codecs')
+                if not aCodecs:
+                    aCodecs = 'None'
+                
+                testBuffer2 = str(testBuffer)
             except:
                 testBuffer2 = "Not Supported"
+                logging.exception('get audio encoder options')
             mediaResult = mediaResult + [['GetAudioEncoderConfigurationOptions', testBuffer2]]
             
             try:
-                testBuffer2 = str(media.GetVideoEncoderConfigurationOptions())
+                testBuffer = media.GetVideoEncoderConfigurationOptions()
+                
+                # compiling a list of available codecs for summary
+                
+                try:
+                    if len(testBuffer.MPEG4):
+                        vCodecs = 'MPEG4'
+                except:
+                    vCodecs = ''
+                try:
+                    if len(testBuffer.H264):
+                        if vCodecs:
+                            vCodecs = vCodecs + ', H264'
+                        else:
+                            vCodecs = 'H264'
+                except:
+                    vCodecs = vCodecs + ''
+                try:
+                    if len(testBuffer.JPEG):
+                        if vCodecs:
+                            vCodecs = vCodecs + ', JPEG'
+                        else:
+                            vCodecs = 'JPEG'
+                except:
+                    vCodecs = vCodecs + ''
+                if not vCodecs:
+                    vCodecs = 'None'
+                
+                # compiling a list of available resolutions for summary
+                
+                vResolutions = ''
+                try:
+                    for x in testBuffer.MPEG4.ResolutionsAvailable:
+                        if not vResolutions:
+                            vResolutions = 'MPEG4: ' + str(x.Width) + 'x' + str(x.Height)
+                        else:
+                            vResolutions = vResolutions + ', ' + str(x.Width) + 'x' + str(x.Height)
+                except:
+                    logging.exception('couldnt find resolutions for mpeg4')
+                if vResolutions:
+                    vResolutions = vResolutions + '\n'
+                try:
+                    for x in testBuffer.H264.ResolutionsAvailable:
+                        if not vResolutions:
+                            vResolutions = 'H264: ' + str(x.Width) + 'x' + str(x.Height)
+                        else:
+                            if 'H264:' in vResolutions:
+                                vResolutions = vResolutions + ', ' + str(x.Width) + 'x' + str(x.Height)
+                            else:
+                                vResolutions = vResolutions + 'H264: ' + str(x.Width) + 'x' + str(x.Height)
+                except:
+                    logging.exception('couldnt find resolutions for h264')
+                if vResolutions:
+                    vResolutions = vResolutions + '\n'
+                try:
+                    for x in testBuffer.JPEG.ResolutionsAvailable:
+                        if not vResolutions:
+                            vResolutions = 'JPEG: ' + str(x.Width) + 'x' + str(x.Height)
+                        else:
+                            if 'JPEG:' in vResolutions:
+                                vResolutions = vResolutions + ', ' + str(x.Width) + 'x' + str(x.Height)
+                            else:
+                                vResolutions = vResolutions + 'JPEG: ' + str(x.Width) + 'x' + str(x.Height)
+                except:
+                    logging.exception('couldnt find resolutions for jpeg')
+                if not vResolutions:
+                    vResolutions = 'None'
+                testBuffer2 = str(testBuffer)
             except:
                 testBuffer2 = "Not Supported"
+                logging.exception('get video encoder options')
             mediaResult = mediaResult + [['GetVideoEncoderConfigurationOptions', testBuffer2]]
             
             try:
@@ -403,6 +583,7 @@ class Tester:
                 GetProfilesF = True
             except:
                 testBuffer2 = "Not Supported"
+                logging.exception('media get profiles')
             mediaResult = mediaResult + [['GetProfiles', testBuffer2]]
             
             try:
@@ -502,18 +683,21 @@ class Tester:
                 testBuffer = str(events.GetServiceCapabilities())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             eventResult = [['GetServiceCapabilities', testBuffer]]
             
             try:
                 testBuffer = str(events.CreatePullPointSubscription())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             eventResult = eventResult + [['CreatePullPointSubscription', testBuffer]]
             
             try:
                 testBuffer = str(events.PullMessages())
             except AttributeError:
                 testBuffer = "Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)"
+                logging.exception(' ')
             eventResult = eventResult + [['PullMessages', testBuffer]]
             
             if "Not Supported" not in testBuffer:
@@ -521,6 +705,7 @@ class Tester:
                     testBuffer = str(events.GetEventProperties())
                 except:
                     testBuffer = "Not Supported"
+                    logging.exception(' ')
                 eventResult = eventResult + [['GetEventProperties', testBuffer]]
             else:
                 eventsF = False
@@ -538,41 +723,54 @@ class Tester:
                 GetNodesF = True
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             ptzResult = [['GetNodes', testBuffer]]
         
             if testBuffer == "Not Supported":
                 testBuffer = "Not Supported Due To GetNodes() Unavailability"
             else:
-                testBuffer = ptz.GetNodes()
-                testBuffer2 = ptz.GetNode(testBuffer[0].token)
-                if testBuffer2 == testBuffer[0]:
-                    testBuffer = "Supported"
-                else:
+                try:
+                    testBuffer = ptz.GetNodes()
+                    testBuffer2 = ptz.GetNode(testBuffer[0].token)
+                    if testBuffer2 == testBuffer[0]:
+                        testBuffer = "Supported"
+                    else:
+                        testBuffer = "Not Supported"
+                except:
                     testBuffer = "Not Supported"
+                    logging.exception(' ')
             ptzResult = ptzResult + [['GetNode', testBuffer]]
             
             try:
                 testBuffer = str(ptz.GetConfigurations())
             except:
                 testBuffer = "Not Supported"
+                logging.exception(' ')
             ptzResult = ptzResult + [['GetConfigurations', testBuffer]]
         
             if testBuffer == "Not Supported":
                 testBuffer = "Unable to test due to unavailability of GetConfigurations() method"
             else:
-                testBuffer = ptz.GetConfigurations()
-                testBuffer2 = ptz.GetConfiguration(testBuffer[0].token)
-                if testBuffer2 == testBuffer[0]:
-                    testBuffer = "Supported"
-                else:
+                try:
+                    testBuffer = ptz.GetConfigurations()
+                    testBuffer2 = ptz.GetConfiguration(testBuffer[0].token)
+                    if testBuffer2 == testBuffer[0]:
+                        testBuffer = "Supported"
+                    else:
+                        testBuffer = "Not Supported"
+                except:
                     testBuffer = "Not Supported"
+                    logging.exception(' ')
             ptzResult = ptzResult + [['GetConfiguration', testBuffer]]
             
             sleep(1)
             
-            mediaToken = media.GetProfiles()[0].token
-            statusInit = ptz.GetStatus(mediaToken)
-            print(str(statusInit))
+            try:
+                mediaToken = media.GetProfiles()[0].token
+                statusInit = ptz.GetStatus(mediaToken)
+                print(str(statusInit))
+            except:
+                logging.exception(' ')
             
             
             if GetNodesF:
@@ -628,6 +826,7 @@ class Tester:
                 except:
                     testBuffer = "Not Supported"
                     getStatusF = [0, 0]
+                    logging.exception(' ')
                 ptzResult = ptzResult + [['GetStatus', testBuffer]]
             else:
                 testBuffer = "Unable to test due to unavailability of GetNodes() method"
@@ -636,6 +835,8 @@ class Tester:
                 
             if getStatusF == [0, 0]:
                 testBuffer = 'Unable to test due to unavailability of GetStatus() method'
+                contMove = testBuffer
+                absMove = testBuffer
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
                 ptzResult = ptzResult + [['RelativeMove', testBuffer]]
@@ -658,8 +859,11 @@ class Tester:
                         testBuffer = "Not Supported - coordinates didn't change after moving"
                     else:
                         testBuffer = "Supported"
+                    contMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    contMove = testBuffer
+                    logging.exception('cont move pos')
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
                 
                 # absolute move test if only position is available
@@ -679,11 +883,14 @@ class Tester:
                         testBuffer = "Not Supported - coordinates didn't change after moving"
                     else:
                         testBuffer = "Supported"
+                    absMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    absMove = testBuffer
                     logging.exception('abs move pos')
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
             elif getStatusF == [1, 0]:
+                
                 # continuous move test if only status is available
                 try:
                     mediaToken = media.GetProfiles()[0].token
@@ -702,8 +909,11 @@ class Tester:
                         testBuffer = "Not Supported - move status didn't change while moving"
                     else:
                         testBuffer = "Supported"
+                    contMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    contMove = testBuffer
+                    logging.exception('cont move status')
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
                 
                 # absolute move test if only move status is available
@@ -723,10 +933,16 @@ class Tester:
                         testBuffer = "Not Supported - move status didn't change while moving"
                     else:
                         testBuffer = "Supported"
+                    absMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    absMove = testBuffer
+                    logging.exception('abs move status')
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
             elif getStatusF == [1, 1]:
+                
+                ''' if both position and movestatus are supported '''
+                
                 # continuous move test using move status
                 try:
                     mediaToken = media.GetProfiles()[0].token
@@ -745,8 +961,11 @@ class Tester:
                         testBuffer = "Not Supported - move status didn't change while moving"
                     else:
                         testBuffer = "Supported"
+                    contMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    contMove = testBuffer
+                    logging.exception('cont move getstatus')
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
                 
                 # absolute move test using position
@@ -766,16 +985,17 @@ class Tester:
                         testBuffer = "Not Supported - coordinates didn't change after moving"
                     else:
                         testBuffer = "Supported"
+                    absMove = testBuffer
                 except:
                     testBuffer = "Not Supported"
+                    absMove = testBuffer
+                    logging.exception('abs move getstatus')
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
         
         date = str(datetime.datetime.now())
         date = date.split('.')
         header = [['Device IP', ip], ['Test Performed', date[0]]]
-        header2 = [['Method Tested', 'Test Result']]
-        summary = [['DeviceMgmt', str(dmgmtF)], ['DeviceIO', str(dioF)], ['Events', str(eventsF)], ['Analytics', str(analytF)], ['PTZ', str(ptzF)], ['Media', str(mediaF)]]
-        spacer = [['', ''], ['', '']]
+        summary = [['Continuous Move', contMove], ['Absolute Move', absMove], ['Video Encoding', vCodecs], ['Video Resolutions', vResolutions], ['Audio Encoding', aCodecs], ['Relay Support', str(relayF)]]
         reportn = os.getcwd() + '/engine/reports/' + ip + '.csv'
         with open(reportn, 'w') as csvFile:
             writer = csv.writer(csvFile)

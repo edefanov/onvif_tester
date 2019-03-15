@@ -22,7 +22,8 @@
             })
             
             
-            {% endfor %}              
+            {% endfor %}    
+           
     });
 </script>
     
@@ -177,42 +178,22 @@
   <div class="collapse" id="summaryCollapse{{id}}">
   <div class="card card-body">
   <table class="table table-bordered">
-    <tr><td>Device Management</td>
-    <td>{% if summary[id][1][1] == 'True' %} 
-    Supported 
-    {% else %} 
-    Not Supported 
-    {% endif %}</td></tr>
-    <tr><td>Device IO</td>
-    <td>{% if summary[id][2][1] == 'True' %} 
-    Supported 
-    {% else %} 
-    Not Supported 
-    {% endif %}</td></tr>
-    <tr><td>Events</td>
-    <td>{% if summary[id][3][1] == 'True' %} 
-    Supported 
-    {% else %} 
-    Not Supported 
-    {% endif %}</td></tr>
-    <tr><td>Analytics</td> 
-    <td>{% if summary[id][4][1] == 'True' %} 
-    Supported 
-    {% else %} 
-    Not Supported 
-    {% endif %}</td></tr>
-    <tr><td>PTZ</td>
-    <td>{% if summary[id][5][1] == 'True' %} 
-    Supported 
-    {% else %} 
-    Not Supported 
-    {% endif %}</td></tr>
-    <tr><td>Media</td>
+    <tr><td>Continuous Move</td>
+    <td>{{summary[id][1][1]}}</td></tr>
+    <tr><td>Absolute Move</td>
+    <td>{{summary[id][2][1]}}</td></tr>
+    <tr><td>Video Encoding</td>
+    <td>{{summary[id][3][1]}}</td></tr>
+    <tr><td>Video Resolutions</td>
+    <td><pre>{{summary[id][4][1] | safe}}</pre></td></tr>   
+    <tr><td>Audio Encoding</td>
+    <td>{{summary[id][5][1]}}</td></tr> 
+    <tr><td>Relay Support</td>
     <td>{% if summary[id][6][1] == 'True' %} 
-    Supported 
+    Supported
     {% else %} 
     Not Supported 
-    {% endif %}</td></tr>
+    {% endif %}</td></tr>    
     </table>
   </div>
   </div>

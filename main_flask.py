@@ -77,7 +77,7 @@ def discover():
         for service in ret:
             if 'onvif' in service.getXAddrs()[0]:
                 ip = service.getXAddrs()[0]
-                print(ip)
+                #print(ip)
                 ip = ip.split('/')
                 buf = ip[2].split(':')
                 ip = buf[0]
@@ -86,7 +86,7 @@ def discover():
                 else:
                     port = '80'
                 cameras = cameras + [[ip, port]]
-                print(cameras)
+                #print(cameras)
         cameras.sort()
         for each in cameras:
             count = count + 1
@@ -120,7 +120,7 @@ def homepage():
         if os.path.isfile(os.getcwd() + '/engine/reports/' + fname):
             with open(os.getcwd() + '/engine/reports/' + fname) as report:
                 reader = csv.reader(report)
-                sum = [row for idx, row in enumerate(reader) if idx in range(1,8)]
+                sum = [row for idx, row in enumerate(reader) if idx in range(1,11)]
             info = info + [sum]
         else:
             info = info + [[None]]
@@ -176,7 +176,12 @@ def download(id):
     fname2 = '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
     fpath = os.getcwd() + '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
     return send_file(fpath, as_attachment=True)
+    
+@app.route('/log')
+def dllog():
+    fpath = os.getcwd() + '/tester.log'
+    return send_file(fpath, as_attachment=True)
    
 if __name__ == '__main__':
     #app.run(host='127.0.0.1')
-    app.run(host='192.168.11.211')
+    app.run(host='192.168.11.211', debug=True)
