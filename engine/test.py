@@ -20,8 +20,12 @@ class Tester:
         return xmlvalue
 
     def main(self):
-    
-        logpath = os.getcwd() + '/engine/utils/log.txt'
+        file = open(os.getcwd() + '/engine/status.log', 'w')
+        file.write('starting')
+        file.close()
+        
+        # setting up logging
+        
         
         for handler in logging.root.handlers[:]:
             logging.root.removeHandler(handler)
@@ -30,9 +34,6 @@ class Tester:
         
         logging.info('test log')
         
-        
-        #sys.stdout = open(logpath, 'w')
-        #sys.stderr = open(logpath, 'w')
         
         # reading config
         
@@ -50,6 +51,25 @@ class Tester:
         
         zeep.xsd.simple.AnySimpleType.pythonvalue = self.zeep_pythonvalue
         
+        # variables
+        
+        getStatusF = None
+        getiStatusF = None
+        GetProfilesF = False
+        vSourceToken = None
+        rToken = None
+        relayF = False
+        contMove = 'Not Supported'
+        absMove = 'Not Supported'
+        vCodecs = 'None'
+        aCodecs = 'None'
+        vResolutions = 'None'
+        testBuffer = None
+        testBuffer2 = None
+        testBuffer3 = None
+        connected = False
+        
+        
         # getting ip
         
         ip = config.get('IP')
@@ -66,22 +86,29 @@ class Tester:
         login = 'admin'
         password = 'Supervisor'
         
-        
-        mycam = ONVIFCamera(ip, port, login, password)
-        
-        # variables
-        
-        getStatusF = None
-        getiStatusF = None
-        GetProfilesF = False
-        vSourceToken = None
-        rToken = None
-        relayF = False
-        contMove = 'Not Supported'
-        absMove = 'Not Supported'
-        vCodecs = 'None'
-        aCodecs = 'None'
-        vResolutions = 'None'
+        try:
+            mycam = ONVIFCamera(ip, port, login, password)
+            connected = True
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('connected')
+            file.close()
+        except:
+            logging.exception("couldn't connect")
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('retrying')
+            file.close()
+            sleep(5)
+            try:
+                mycam = ONVIFCamera(ip, port, login, password)
+                file = open(os.getcwd() + '/engine/status.log', 'w')
+                file.write('connected')
+                file.close()
+            except:
+                file = open(os.getcwd() + '/engine/status.log', 'w')
+                file.write('notconnected')
+                file.close()
+                return
+            connected = False
         
         
         # trying out different services
@@ -127,39 +154,36 @@ class Tester:
         ####################################
         
         if dmgmtF:
+            logging.info(' ')
+            logging.info('testing devicemgmt')
+            logging.info(' ')
             dmgmtResult = None
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('dmgmt')
+            file.close()
             try:
                 testBuffer = str(dmgmt.GetDeviceInformation())
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getdeviceinformation')
             dmgmtResult = [['GetDeviceInformation', testBuffer]]
             
             sleep(0.5)
             
-            try:
-                testBuffer = str(dmgmt.GetDeviceCapabilities())
-            except:
-                testBuffer = "Not Supported"
-                logging.exception(' ')
-            dmgmtResult = dmgmtResult + [['GetDeviceCapabilities', testBuffer]]
+            # try:
+                # testBuffer = str(dmgmt.GetDeviceCapabilities())
+            # except:
+                # testBuffer = "Not Supported"
+                # logging.exception('getdevicecapabilities')
+            # dmgmtResult = dmgmtResult + [['GetDeviceCapabilities', testBuffer]]
             
-            sleep(0.5)
-            
-            try:
-                testBuffer = str(dmgmt.GetSystemLog())
-            except:
-                testBuffer = "Not Supported Or Empty"
-                logging.exception(' ')
-            dmgmtResult = [['GetSystemLog', testBuffer]]
-            
-            sleep(0.5)
+            # sleep(0.5)
             
             try:
                 testBuffer = str(dmgmt.GetRemoteDiscoveryMode())
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getremotediscoverymode')
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]         
             
             sleep(0.5)
@@ -168,7 +192,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetEndpointReference())
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getendpointreference')
             dmgmtResult = dmgmtResult + [['GetEndpointReference', testBuffer]]    
             
             sleep(0.5)
@@ -177,7 +201,7 @@ class Tester:
                 testBuffer = str(dmgmt.GetSystemDateAndTime())
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getsystemdateandtime')
             dmgmtResult = dmgmtResult + [['GetSystemDateAndTime', testBuffer]]              
             
             sleep(0.5)
@@ -187,7 +211,7 @@ class Tester:
                 testBuffer2 = testBuffer
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getdiscoverymode')
             dmgmtResult = dmgmtResult + [['GetDiscoveryMode', testBuffer]]
             
             sleep(0.5)
@@ -197,21 +221,24 @@ class Tester:
                     dmgmt.SetDiscoveryMode('NonDiscoverable')
                     testBuffer = str(dmgmt.GetDiscoveryMode())
                     if testBuffer == 'NonDiscoverable':
-                        dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
+                        testBuffer3 = 'Supported'
                         dmgmt.SetDiscoveryMode(testBuffer2)
                 except:
-                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
-                    logging.exception(' ')
+                    testBuffer3 = 'Not Supported'
+                    logging.exception('setdiscoverymode')
+                dmgmtResult = dmgmtResult + [['SetDiscoveryMode', testBuffer3]]
             elif testBuffer == 'NonDiscoverable':
                 try:
                     dmgmt.SetDiscoveryMode('Discoverable')
                     testBuffer = str(dmgmt.GetDiscoveryMode())
                     if testBuffer == 'Discoverable':
-                        dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Supported']]
+                        testBuffer3 = 'Supported'
                         dmgmt.SetDiscoveryMode(testBuffer2)
                 except:
-                    dmgmtResult = dmgmtResult + [['SetDiscoveryMode', 'Not Supported']]
-                    logging.exception(' ')
+                    testBuffer3 = 'Not Supported'
+                    logging.exception('setdiscoverymode')
+                dmgmtResult = dmgmtResult + [['SetDiscoveryMode', testBuffer3]]
+            
             sleep(0.5)
             
             try:
@@ -363,27 +390,22 @@ class Tester:
             try:
                 testBuffer2 = dmgmt.GetHostname()
                 testBuffer = str(testBuffer2)
-                #print("gethostname   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
                 logging.exception('gethostname')
-                #print("gethostname   ", testBuffer)
             dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
             
             sleep(0.5)
             
             try:
                 testBuffer = str(dmgmt.GetDNS())
-                #print("getdns   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
-                #print("getdns   ", testBuffer)
             dmgmtResult = dmgmtResult + [['GetDNS', testBuffer]]
             
             try:
                 testBuffer = str(dmgmt.GetDynamicDNS())
-                #print("getdynamicdns   ", testBuffer)
             except:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
@@ -456,13 +478,21 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('set relay output settings')
                 dmgmtResult = dmgmtResult + [['SetRelayOutputSettings', testBuffer]]
+                
+            sleep(2)
             
         ####################################
         #   testing media service block    #
         #################################### 
         
         if mediaF:
+            logging.info(' ')
+            logging.info('testing media')
+            logging.info(' ')
             mediaResult = None
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('media')
+            file.close()
             try:
                 testBuffer = media.GetVideoSources()
                 testBuffer2 = str(testBuffer)
@@ -580,6 +610,9 @@ class Tester:
             try:
                 profileToken = media.GetProfiles()[0].token
                 testBuffer2 = media.GetProfiles()
+                testBuffer2 = str(testBuffer2)
+                if len(testBuffer2) > 67256:
+                    testBuffer2 = (testBuffer2[:67256] + '..') if len(testBuffer2) > 67258 else testBuffer2
                 GetProfilesF = True
             except:
                 testBuffer2 = "Not Supported"
@@ -592,25 +625,33 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception('stream uri')
             mediaResult = mediaResult + [['GetStreamUri', testBuffer2]]
+            
+            sleep(2)
         
         ####################################
         #   testing imaging service block  #
-        ####################################  
+        ####################################
         
         if imagingF:
+            logging.info(' ')
+            logging.info('testing imaging')
+            logging.info(' ')
             imagingResult = None
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('imaging')
+            file.close()
             try:
                 iOptions = imaging.GetOptions(vSourceToken)
                 testBuffer = str(iOptions)
             except:
-                logging.exception(' ')
+                logging.exception('getoptions')
                 testBuffer = "Not Supported"
             imagingResult = [['GetOptions', testBuffer]]
             
             try:
                 testBuffer = str(imaging.GetImagingSettings(vSourceToken))
             except:
-                logging.exception(' ')
+                logging.exception('getimagingsettings')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetImagingSettings', testBuffer]]
             
@@ -628,7 +669,7 @@ class Tester:
             try:
                 testBuffer = str(imaging.GetMoveOptions(vSourceToken))
             except:
-                logging.exception(' ')
+                logging.exception('getmoveoptions')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetMoveOptions', testBuffer]]
             
@@ -640,7 +681,7 @@ class Tester:
                 else:
                     getiStatusF = [1]
             except:
-                logging.exception(' ')
+                logging.exception('getstatus')
                 testBuffer2 = "Not Supported"
             imagingResult = imagingResult + [['GetStatus', testBuffer2]]
             
@@ -671,14 +712,22 @@ class Tester:
                 iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}}
                 imaging.SetImagingSettings(iset)
             except:
-                logging.exception('set autofocus back')     
+                logging.exception('set autofocus back')   
+
+            sleep(2)
         
         ####################################
         #   testing events service block   #
         ####################################  
         
         if eventsF:
+            logging.info(' ')
+            logging.info('testing events')
+            logging.info(' ')
             eventResult = None
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('events')
+            file.close()
             try:
                 testBuffer = str(events.GetServiceCapabilities())
             except:
@@ -709,21 +758,28 @@ class Tester:
                 eventResult = eventResult + [['GetEventProperties', testBuffer]]
             else:
                 eventsF = False
-                
+            
+            sleep(2)
         
         ####################################
         #    testing ptz service block     #
         ####################################
         
         if ptzF:
+            logging.info(' ')
+            logging.info('testing ptz')
+            logging.info(' ')
             ptzResult = None
             GetNodesF = False
+            file = open(os.getcwd() + '/engine/status.log', 'w')
+            file.write('ptz')
+            file.close()
             try:
                 testBuffer = str(ptz.GetNodes())
                 GetNodesF = True
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getnodes')
             ptzResult = [['GetNodes', testBuffer]]
         
             if testBuffer == "Not Supported":
@@ -738,14 +794,14 @@ class Tester:
                         testBuffer = "Not Supported"
                 except:
                     testBuffer = "Not Supported"
-                    logging.exception(' ')
+                    logging.exception('getnode')
             ptzResult = ptzResult + [['GetNode', testBuffer]]
             
             try:
                 testBuffer = str(ptz.GetConfigurations())
             except:
                 testBuffer = "Not Supported"
-                logging.exception(' ')
+                logging.exception('getconfigurations')
             ptzResult = ptzResult + [['GetConfigurations', testBuffer]]
         
             if testBuffer == "Not Supported":
@@ -760,7 +816,7 @@ class Tester:
                         testBuffer = "Not Supported"
                 except:
                     testBuffer = "Not Supported"
-                    logging.exception(' ')
+                    logging.exception('getconfiguration')
             ptzResult = ptzResult + [['GetConfiguration', testBuffer]]
             
             sleep(1)
@@ -826,7 +882,7 @@ class Tester:
                 except:
                     testBuffer = "Not Supported"
                     getStatusF = [0, 0]
-                    logging.exception(' ')
+                    logging.exception('getstatus')
                 ptzResult = ptzResult + [['GetStatus', testBuffer]]
             else:
                 testBuffer = "Unable to test due to unavailability of GetNodes() method"
@@ -991,7 +1047,11 @@ class Tester:
                     absMove = testBuffer
                     logging.exception('abs move getstatus')
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
+            sleep(2)    
         
+        file = open(os.getcwd() + '/engine/status.log', 'w')
+        file.write('file')
+        file.close()
         date = str(datetime.datetime.now())
         date = date.split('.')
         header = [['Device IP', ip], ['Test Performed', date[0]]]
@@ -1016,4 +1076,7 @@ class Tester:
             if ptzF:
                 writer.writerows([['testptz', '1']])
                 writer.writerows(ptzResult)
-        csvFile.close()    
+        csvFile.close()
+        file = open(os.getcwd() + '/engine/status.log', 'w')
+        file.write('finished')
+        file.close()

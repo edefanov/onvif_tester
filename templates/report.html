@@ -76,7 +76,7 @@ $(function() {
         
         
         <td>{{ dat[0] }}</td>
-        <td>{% if '{' in dat[1] %}
+        <td class='align-middle' >{% if dat[1]|length > 300 %}
         
         <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
           <div class="collapse" id="viewFull{{count|length}}">
@@ -85,11 +85,23 @@ $(function() {
         
         {% elif '<br/>' in dat[1] %}
         
-        <pre>{{ dat[1] | safe }}</pre>
+        <span><pre>{{ dat[1] | safe }}</pre></span>
         
         {% else %}
+            
+            {% if dat[1] == 'Supported' %}
+            
+            <span style='color:green'> {{ dat[1] }}</span>
+            
+            {% elif dat[1] == 'Not Supported' %}
+            
+            <span style='color:red'> {{ dat[1] }}</span>
+            
+            {% else %}
         
-            {{ dat[1] }}
+            <span>{{ dat[1] }}</span>
+            
+            {% endif %}
         
         {% endif %} </td></tr>
         

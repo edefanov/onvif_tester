@@ -1,0 +1,9 @@
+INFO:root:test log
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
+INFO:root: 
+INFO:root:testing devicemgmt
+INFO:root: 
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.15.43
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.15.43

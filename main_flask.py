@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, jsonify
+from flask import Flask, render_template, request, send_file, jsonify, Response
 import os
 import time
 import calendar
@@ -10,6 +10,8 @@ from onvif import ONVIFCamera
 import zeep
 from WSDiscovery import WSDiscovery
 from engine import test
+from ast import literal_eval
+from datetime import datetime
 
 class Config(object):      
     def __init__(self, IP, on = False):   
@@ -30,9 +32,8 @@ class Config(object):
         return self.dct
     
 def tracking_on(id):
-    # starts tracking
+    # starts testing
     import settings
-    global trackingMain
     intd = int(id)
     camera = settings.cameras[intd][0] + ':' + settings.cameras[intd][1]
     conf.dct['IP'] = camera
@@ -52,6 +53,19 @@ def tracking_off(id):
         return 'unable to kill - no proccess'
     return 'OK!  def tracking_off'
 
+def quicksummary(id):
+    id = int(id)
+    info = []
+    import settings
+    fname = str(settings.cameras[id][0]) + '.csv'
+    if os.path.isfile(os.getcwd() + '/engine/reports/' + fname):
+        with open(os.getcwd() + '/engine/reports/' + fname) as report:
+            reader = csv.reader(report)
+            sum = [row for idx, row in enumerate(reader) if idx in range(1,11)]
+        info = info + [sum]
+    else:
+        info = info + [[None]]
+    return info
 
 def crDict():
     global conf
@@ -105,14 +119,14 @@ def discover():
 app = Flask(__name__)
 @app.before_first_request
 def startup():
-    global trackingMain
-    trackingMain = None
+    global t
+    t = None
 
 @app.route('/')
 def homepage():
     info = []
     crDict()
-    if calendar.timegm(time.gmtime()) - os.path.getmtime(os.getcwd() + '/settings.py') >= 300:
+    if calendar.timegm(time.gmtime()) - os.path.getmtime(os.getcwd() + '/settings.py') >= 600:
         discover()
     import settings
     for idd in settings.ids:
@@ -126,33 +140,61 @@ def homepage():
             info = info + [[None]]
     return render_template('index.html', ids = settings.ids, cameras = settings.cameras, N = len(settings.cameras), summary = info)
 
-@app.route('/discover', methods=['POST'])
+@app.route('/discover')
 def refresh():
-    info = []
-    crDict()
     discover()
-    import settings
-    for idd in settings.ids:
-        fname = str(settings.cameras[idd][0]) + '.csv'
-        if os.path.isfile(os.getcwd() + '/engine/reports/' + fname):
-            with open(os.getcwd() + '/engine/reports/' + fname) as report:
-                reader = csv.reader(report)
-                sum = [row for idx, row in enumerate(reader) if idx in range(1,8)]
-            info = info + [sum]
-        else:
-            info = info + [[None]]
-    return render_template('index.html', ids = settings.ids, cameras = settings.cameras, N = len(settings.cameras), summary = info)
+    return jsonify(dict(status='finished'))
 
+@app.route('/getsummary')
+def getsummary():
+    infor = ''
+    info = quicksummary(request.args['id'])
+    if info[0][6][1] == 'True':
+        infor = 'Supported'
+    else:
+        infor = 'Not Supported'
+    html = "<table class='table table-bordered'><tr><td>Continuous Move</td><td>{}</td></tr><tr><td>Absolute Move</td><td>{}</td></tr><tr><td>Video Encoding</td><td>{}</td></tr><tr><td>Video Resolutions</td><td><pre>{}</pre></td></tr><tr><td>Audio Encoding</td><td>{}</td></tr><tr><td>Relay Support</td><td>{}</td></tr></table>".format(info[0][1][1], info[0][2][1], info[0][3][1], info[0][4][1], info[0][5][1], infor)
+    return jsonify(dict(status=html))
 
 @app.route('/set_on')
 def set_on():
-    print(tracking_on(request.args['id']))
-    return jsonify(dict(status='finished'))
-
+    global t
+    t = Process(target=tracking_on, args=(request.args['id'], ))
+    t.start()
+    #time.sleep(0.5)
+    return jsonify(dict(status="finished"))
+    
 @app.route('/set_off')
 def set_off():
-    print(tracking_off(request.args['id']))
-    return ' '
+    try:
+        file = open(os.getcwd() + '/engine/status.log', 'w')
+        file.write('cancelled')
+        file.close()
+        t.terminate()
+        t.join()
+        print('terminated sucessfully')
+    except:
+        print('error terminating process')
+    return jsonify(dict(status="finished"))
+    
+@app.route('/status')
+def getstatus():
+    statusR = None
+    file = open(os.getcwd() + '/engine/status.log', 'r')
+    statusR = file.read()
+    return jsonify(dict(status=statusR))
+
+@app.route('/clearreports')
+def delreports():
+    folder = os.getcwd() + '/engine/reports'
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except:
+            print("couldn't delete file")
+    return jsonify(dict(status='finished'))
 
 @app.route('/viewfull/<id>')
 def view_full(id):
@@ -180,7 +222,13 @@ def download(id):
 @app.route('/log')
 def dllog():
     fpath = os.getcwd() + '/tester.log'
-    return send_file(fpath, as_attachment=True)
+    with open(fpath) as log_file:
+        data = log_file.read()
+        data = data.replace('\n', '<br/>')
+        log_file.close()
+    dateB = os.path.getmtime(os.getcwd() + '/tester.log')
+    date = datetime.fromtimestamp(dateB).strftime('%Y-%m-%d %H:%M:%S')
+    return render_template('log.html', data=data, date=date)
    
 if __name__ == '__main__':
     #app.run(host='127.0.0.1')
