@@ -17,7 +17,7 @@
                     });
                     console.log('set on');
                     function checkstatus(){
-                        var tid = setTimeout(checkstatus, 2000);
+                        var tid = setTimeout(checkstatus, 1000);
                         $.getJSON('/status', {}, function(data2) {
                             if (data2.status == 'starting') {
                                 $('#status').text('Connecting to camera..');
@@ -25,21 +25,21 @@
                                 console.log(data2.status);
                             } else if (data2.status == 'connected') {
                                 $('#status').text('Connection established');
-                                console.log(data2.status);
+                                console.log(data2.status2);
                             } else if (data2.status == 'dmgmt') {
-                                $('#status').text('Testing device management service');
-                                console.log(data2.status);
+                                $('#status').text('Testing device management service'.concat(' ', data2.status2));
+                                console.log(data2.status2);
                             } else if (data2.status == 'media') {
-                                $('#status').text('Testing media service');
-                                console.log(data2.status);
+                                $('#status').text('Testing media service'.concat(' ', data2.status2));
+                                console.log(data2.status2);
                             } else if (data2.status == 'imaging') {
-                                $('#status').text('Testing imaging service');
+                                $('#status').text('Testing imaging service'.concat(' ', data2.status2));
                                 console.log(data2.status);
                             } else if (data2.status == 'events') {
-                                $('#status').text('Testing events service');
+                                $('#status').text('Testing events service'.concat(' ', data2.status2));
                                 console.log(data2.status);
                             } else if (data2.status == 'ptz') {
-                                $('#status').text('Testing PTZ service');
+                                $('#status').text('Testing PTZ service'.concat(' ', data2.status2));
                                 console.log(data2.status);
                             } else if (data2.status == 'file') {
                                 $('#status').text('Writing results to file');
@@ -56,21 +56,22 @@
                                     var redirectwindow = window.open('/viewfull/'+id, '_blank');
                                     redirectwindow.location;                           
                                 });
-                                $('#closewindow').click( function() {location.reload(1)});
+                                $('#closewindow').click( function() {location.reload(true)});
                                 $('#viewlog2').click( function() {var redirectwindow = window.open('/log', '_blank'); redirectwindow.location;  });
                                 $('#exampleModalCenter2').modal('handleUpdate');
                             } else if (data2.status == 'cancelled'){
                                 clearTimeout(tid);
                                 $('#status').text('Test cancelled, reloading the page');
-                                location.reload(1);
+                                location.reload(true);
                             } else if (data2.status == 'retrying'){
                                 $('#status').text('Unable to connect, retrying one more time');
                             } else if (data2.status == 'notconnected'){
                                 clearTimeout(tid);
                                 $('#exampleModalCenter').modal('hide');
-                                $('#exampleModalCenter2').modal({keyboard: false, backdrop: "static"});
-                                document.getElementById("summarymodal").innerHTML = "<h4 class='text-center' style='color:red'>Unable to connect, test was not performed></h4>";
-                                document.getElementById("viewfullreport").style.display = 'none';
+                                $('#exampleModalCenter3').modal({keyboard: false, backdrop: "static"});
+                                document.getElementById("summarymodal2").innerHTML = "<h4 class='text-center' style='color:red'>Unable to connect, test was not performed</h4>";
+                                $('#viewlog3').click( function() {var redirectwindow = window.open('/log', '_blank'); redirectwindow.location;  });
+                                $('#closewindow2').click( function() {location.reload(true)});
                             }
                         });
                         };
@@ -97,7 +98,8 @@
                 //var redirectwindow = window.open('/discover')
                 //redirectwindow.location;
                 //window.location.href = '/discover';
-                $.getJSON('/discover', {}, function(data) { if (data.status == 'finished') {location.reload(1)}});
+                $('#exampleModalCenter4').modal({keyboard: false, backdrop: "static"});
+                $.getJSON('/discover', {}, function(data) { if (data.status == 'finished') {location.reload(3)}});
                 console.log('xd');
             });
         $("#canceltest").click( function() {
@@ -106,7 +108,7 @@
                 console.log('killed the process');
             });
         $("#clearreports").click( function() {
-                $.getJSON('/clearreports', {}, function(data) { if (data.status == 'finished') {location.reload(1)}});
+                $.getJSON('/clearreports', {}, function(data) { if (data.status == 'finished') {location.reload(true)}});
                 console.log('deleted all reports');
             });
     });
@@ -245,6 +247,43 @@
             <button id="viewlog2" type="button" class="btn btn-info">View Log</button>
             <button id="viewfullreport" type="button" class="btn btn-success">View Full Report</button>
             <button id="closewindow" type="button" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="col-12 modal-title text-center">Test failed</h5>
+      </div>
+      <div class="modal-body" style='overflow:auto'>
+             <div id='summarymodal2' style='overflow:auto'>
+                
+             </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+            <button id="viewlog3" type="button" class="btn btn-info">View Log</button>
+            <button id="closewindow2" type="button" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" id="exampleModalCenter4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="col-12 modal-title text-center">Discovering devices</h5>
+      </div>
+      <div class="modal-body" style='overflow:auto'>
+             <div id='summarymodal2' style='overflow:auto'>
+                <h4 class='text-center'>Hold on just a second, discovering devices</h4>
+             </div>
+      </div>
+      <div class="modal-footer justify-content-right">
+            <h6>The page will refresh automatically</h6>
       </div>
     </div>
   </div>

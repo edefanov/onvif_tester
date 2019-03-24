@@ -1,9 +1,122 @@
 INFO:root:test log
-INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
-INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
 INFO:root: 
 INFO:root:testing devicemgmt
 INFO:root: 
-INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.15.43
-INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.15.43
-INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.15.43
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:root:no onviftester
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:root: 
+INFO:root:testing media
+INFO:root: 
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+ERROR:root:couldnt find resolutions for mpeg4
+Traceback (most recent call last):
+  File "/home/aivanov/onvif_tester2/engine/test.py", line 649, in main
+    for x in testBuffer.MPEG4.ResolutionsAvailable:
+AttributeError: 'NoneType' object has no attribute 'ResolutionsAvailable'
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:root: 
+INFO:root:testing imaging
+INFO:root: 
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:root: 
+INFO:root:testing events
+INFO:root: 
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+ERROR:root: 
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/zeep/proxy.py", line 69, in __getitem__
+    return self._operations[key]
+KeyError: 'PullMessages'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/aivanov/onvif_tester2/engine/test.py", line 874, in main
+    testBuffer = str(events.PullMessages())
+  File "/usr/local/lib/python3.5/dist-packages/onvif_zeep-0.2.11-py3.5.egg/onvif/client.py", line 198, in __getattr__
+    return self.service_wrapper(getattr(self.ws_client, name))
+  File "/usr/local/lib/python3.5/dist-packages/zeep/proxy.py", line 60, in __getattr__
+    return self[key]
+  File "/usr/local/lib/python3.5/dist-packages/zeep/proxy.py", line 71, in __getitem__
+    raise AttributeError('Service has no operation %r' % key)
+AttributeError: Service has no operation 'PullMessages'
+INFO:root: 
+INFO:root:testing ptz
+INFO:root: 
+INFO:requests.packages.urllib3.connectionpool:Starting new HTTP connection (1): 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23
+INFO:requests.packages.urllib3.connectionpool:Resetting dropped connection: 192.168.11.23

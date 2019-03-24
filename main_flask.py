@@ -12,6 +12,7 @@ from WSDiscovery import WSDiscovery
 from engine import test
 from ast import literal_eval
 from datetime import datetime
+import importlib
 
 class Config(object):      
     def __init__(self, IP, on = False):   
@@ -34,8 +35,10 @@ class Config(object):
 def tracking_on(id):
     # starts testing
     import settings
+    importlib.reload(settings)
+    from settings import ids, cameras
     intd = int(id)
-    camera = settings.cameras[intd][0] + ':' + settings.cameras[intd][1]
+    camera = cameras[intd][0] + ':' + settings.cameras[intd][1]
     conf.dct['IP'] = camera
     conf.dct['on'] = True
     conf.write_to_file()
@@ -57,7 +60,9 @@ def quicksummary(id):
     id = int(id)
     info = []
     import settings
-    fname = str(settings.cameras[id][0]) + '.csv'
+    importlib.reload(settings)
+    from settings import ids, cameras
+    fname = str(cameras[id][0]) + '.csv'
     if os.path.isfile(os.getcwd() + '/engine/reports/' + fname):
         with open(os.getcwd() + '/engine/reports/' + fname) as report:
             reader = csv.reader(report)
@@ -129,8 +134,11 @@ def homepage():
     if calendar.timegm(time.gmtime()) - os.path.getmtime(os.getcwd() + '/settings.py') >= 600:
         discover()
     import settings
-    for idd in settings.ids:
+    importlib.reload(settings)
+    from settings import ids, cameras
+    for idd in ids:
         fname = str(settings.cameras[idd][0]) + '.csv'
+        print(fname)
         if os.path.isfile(os.getcwd() + '/engine/reports/' + fname):
             with open(os.getcwd() + '/engine/reports/' + fname) as report:
                 reader = csv.reader(report)
@@ -138,7 +146,7 @@ def homepage():
             info = info + [sum]
         else:
             info = info + [[None]]
-    return render_template('index.html', ids = settings.ids, cameras = settings.cameras, N = len(settings.cameras), summary = info)
+    return render_template('index.html', ids = ids, cameras = cameras, N = len(cameras), summary = info)
 
 @app.route('/discover')
 def refresh():
@@ -180,9 +188,12 @@ def set_off():
 @app.route('/status')
 def getstatus():
     statusR = None
+    status2 = None
     file = open(os.getcwd() + '/engine/status.log', 'r')
     statusR = file.read()
-    return jsonify(dict(status=statusR))
+    file2 = open(os.getcwd() + '/engine/status2.log', 'r')
+    status2 = file2.read()
+    return jsonify(dict(status=statusR, status2=status2))
 
 @app.route('/clearreports')
 def delreports():
@@ -199,10 +210,12 @@ def delreports():
 @app.route('/viewfull/<id>')
 def view_full(id):
     import settings
+    importlib.reload(settings)
+    from settings import ids, cameras
     idd = ast.literal_eval(id)
-    fname = str(settings.cameras[idd][0]) + '.csv'
-    fname2 = '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
-    fpath = os.getcwd() + '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
+    fname = str(cameras[idd][0]) + '.csv'
+    fname2 = '/engine/reports/' + str(cameras[idd][0]) + '.csv'
+    fpath = os.getcwd() + '/engine/reports/' + str(cameras[idd][0]) + '.csv'
     with open(fpath) as csv_file:
         data = list(csv.reader(csv_file))
         for idx, item in enumerate(data):
@@ -213,10 +226,12 @@ def view_full(id):
 @app.route('/download/<id>')
 def download(id):
     import settings
+    importlib.reload(settings)
+    from settings import ids, cameras
     idd = ast.literal_eval(id)
-    fname = str(settings.cameras[idd][0]) + '.csv'
-    fname2 = '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
-    fpath = os.getcwd() + '/engine/reports/' + str(settings.cameras[idd][0]) + '.csv'
+    fname = str(cameras[idd][0]) + '.csv'
+    fname2 = '/engine/reports/' + str(cameras[idd][0]) + '.csv'
+    fpath = os.getcwd() + '/engine/reports/' + str(cameras[idd][0]) + '.csv'
     return send_file(fpath, as_attachment=True)
     
 @app.route('/log')
@@ -232,4 +247,4 @@ def dllog():
    
 if __name__ == '__main__':
     #app.run(host='127.0.0.1')
-    app.run(host='192.168.11.211', debug=True)
+    app.run(host='192.168.11.211', debug=False)

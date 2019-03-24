@@ -154,6 +154,9 @@ class Tester:
         ####################################
         
         if dmgmtF:
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(0%)')
+            file.close()
             logging.info(' ')
             logging.info('testing devicemgmt')
             logging.info(' ')
@@ -167,6 +170,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getdeviceinformation')
             dmgmtResult = [['GetDeviceInformation', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(2%)')
+            file.close()
             
             sleep(0.5)
             
@@ -185,6 +191,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getremotediscoverymode')
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]         
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(4%)')
+            file.close()
             
             sleep(0.5)
             
@@ -194,6 +203,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getendpointreference')
             dmgmtResult = dmgmtResult + [['GetEndpointReference', testBuffer]]    
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(6%)')
+            file.close()
             
             sleep(0.5)
             
@@ -203,6 +215,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getsystemdateandtime')
             dmgmtResult = dmgmtResult + [['GetSystemDateAndTime', testBuffer]]              
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(8%)')
+            file.close()
             
             sleep(0.5)
             
@@ -213,6 +228,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getdiscoverymode')
             dmgmtResult = dmgmtResult + [['GetDiscoveryMode', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(10%)')
+            file.close()
             
             sleep(0.5)
             
@@ -238,6 +256,9 @@ class Tester:
                     testBuffer3 = 'Not Supported'
                     logging.exception('setdiscoverymode')
                 dmgmtResult = dmgmtResult + [['SetDiscoveryMode', testBuffer3]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(12%)')
+            file.close()
             
             sleep(0.5)
             
@@ -248,6 +269,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetRemoteDiscoveryMode', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(14%)')
+            file.close()
 
             if testBuffer2 == 'Discoverable':
                 try:
@@ -271,6 +295,9 @@ class Tester:
                     logging.exception(' ')
             else:
                 dmgmtResult = dmgmtResult + [['SetRemoteDiscoveryMode', 'Not Supported']]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(16%)')
+            file.close()
             
             try:
                 dmgmt.DeleteUsers('O1N2V3IFTester')
@@ -297,6 +324,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('get users')
             dmgmtResult = dmgmtResult + [['GetUsers', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(18%)')
+            file.close()
             
             sleep(1)
             
@@ -336,6 +366,9 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('create user')
                     dmgmtResult = dmgmtResult + [['CreateUsers', testBuffer]] 
+                file = open(os.getcwd() + '/engine/status2.log', 'w')
+                file.write('(20%)')
+                file.close()
                 
                 sleep(1)
                 
@@ -358,6 +391,9 @@ class Tester:
                         testBuffer = "Not Supported"
                         logging.exception('set user')
                         dmgmtResult = dmgmtResult + [['SetUser', testBuffer]] 
+                    file = open(os.getcwd() + '/engine/status2.log', 'w')
+                    file.write('(22%)')
+                    file.close()
                     
                     sleep(1)
                     
@@ -384,6 +420,9 @@ class Tester:
             else:
                 dmgmtResult = dmgmtResult + [['SetUser', 'Unable to test due to unavailability of GetUsers() method']] 
                 dmgmtResult = dmgmtResult + [['DeleteUsers', 'Unable to test due to unavailability of GetUsers() method']] 
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(24%)')
+            file.close()
             
             sleep(0.5)
             
@@ -394,6 +433,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('gethostname')
             dmgmtResult = dmgmtResult + [['GetHostname', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(26%)')
+            file.close()
             
             sleep(0.5)
             
@@ -403,6 +445,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetDNS', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(28%)')
+            file.close()
             
             try:
                 testBuffer = str(dmgmt.GetDynamicDNS())
@@ -410,6 +455,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetDynamicDNS', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(30%)')
+            file.close()
             
             try:
                 testBuffer = str(dmgmt.GetNetworkProtocols())
@@ -417,6 +465,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNetworkProtocols', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(32%)')
+            file.close()
             
             try:
                 testBuffer = str(dmgmt.GetNetworkInterfaces())
@@ -424,6 +475,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNetworkInterfaces', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(33%)')
+            file.close()
             
             try:
                 testBuffer = str(dmgmt.GetNTP())
@@ -431,6 +485,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             dmgmtResult = dmgmtResult + [['GetNTP', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(36%)')
+            file.close()
             
             sleep(0.5)
             
@@ -443,6 +500,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception('get relay outputs')
             dmgmtResult = dmgmtResult + [['GetRelayOutputs', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(41%)')
+            file.close()
             
             if relayF:
                 try:
@@ -454,6 +514,9 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('set relay output state')
                 dmgmtResult = dmgmtResult + [['SetRelayOutputState', testBuffer]]
+                file = open(os.getcwd() + '/engine/status2.log', 'w')
+                file.write('(42%)')
+                file.close()
                 
                 try:
                     rToken = dmgmt.GetRelayOutputs()[0].token
@@ -478,6 +541,9 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('set relay output settings')
                 dmgmtResult = dmgmtResult + [['SetRelayOutputSettings', testBuffer]]
+                file = open(os.getcwd() + '/engine/status2.log', 'w')
+                file.write('(43%)')
+                file.close()
                 
             sleep(2)
             
@@ -486,6 +552,9 @@ class Tester:
         #################################### 
         
         if mediaF:
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(44%)')
+            file.close()
             logging.info(' ')
             logging.info('testing media')
             logging.info(' ')
@@ -501,6 +570,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception(' ')
             mediaResult = [['GetVideoSources', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(46%)')
+            file.close()
             
             try:
                 testBuffer = media.GetAudioSources()
@@ -509,6 +581,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception(' ')
             mediaResult = mediaResult + [['GetAudioSources', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(48%)')
+            file.close()
             
             try:
                 testBuffer = media.GetAudioEncoderConfigurationOptions()
@@ -516,22 +591,27 @@ class Tester:
                 # compiling a list of available codecs for summary
                 
                 aCodecs = ''
-                try:
-                    for x in testBuffer.Options:
-                        if aCodecs == '':
-                            aCodecs = str(x.Encoding)
-                        else:
-                            aCodecs = aCodecs + ', ' + str(x.Encoding)
-                except:
-                    logging.exception('couldnt find any audio codecs')
-                if not aCodecs:
+                if len(testBuffer2)<10 and testBuffer2 != 'Not Supported':
                     aCodecs = 'None'
-                
+                else:
+                    try:
+                        for x in testBuffer.Options:
+                            if aCodecs == '':
+                                aCodecs = str(x.Encoding)
+                            else:
+                                aCodecs = aCodecs + ', ' + str(x.Encoding)
+                    except:
+                        logging.exception('couldnt find any audio codecs')
+                    if not aCodecs:
+                        aCodecs = 'None'
                 testBuffer2 = str(testBuffer)
             except:
                 testBuffer2 = "Not Supported"
                 logging.exception('get audio encoder options')
             mediaResult = mediaResult + [['GetAudioEncoderConfigurationOptions', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(50%)')
+            file.close()
             
             try:
                 testBuffer = media.GetVideoEncoderConfigurationOptions()
@@ -606,6 +686,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception('get video encoder options')
             mediaResult = mediaResult + [['GetVideoEncoderConfigurationOptions', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(52%)')
+            file.close()
             
             try:
                 profileToken = media.GetProfiles()[0].token
@@ -618,6 +701,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception('media get profiles')
             mediaResult = mediaResult + [['GetProfiles', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(55%)')
+            file.close()
             
             try:
                 testBuffer2 = str(media.GetStreamUri({'StreamSetup': {'Stream': 'RTP-Unicast', 'Transport': 'UDP'}, 'ProfileToken': profileToken}))
@@ -625,6 +711,9 @@ class Tester:
                 testBuffer2 = "Not Supported"
                 logging.exception('stream uri')
             mediaResult = mediaResult + [['GetStreamUri', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(57%)')
+            file.close()
             
             sleep(2)
         
@@ -633,6 +722,9 @@ class Tester:
         ####################################
         
         if imagingF:
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(0/7)')
+            file.close()
             logging.info(' ')
             logging.info('testing imaging')
             logging.info(' ')
@@ -647,6 +739,9 @@ class Tester:
                 logging.exception('getoptions')
                 testBuffer = "Not Supported"
             imagingResult = [['GetOptions', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(58%)')
+            file.close()
             
             try:
                 testBuffer = str(imaging.GetImagingSettings(vSourceToken))
@@ -654,17 +749,26 @@ class Tester:
                 logging.exception('getimagingsettings')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetImagingSettings', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(60%)')
+            file.close()
             
-            if 'MANUAL' in iOptions.Focus.AutoFocusModes:
-                try:
-                    iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'MANUAL'}}}
-                    imaging.SetImagingSettings(iset)
-                    if imaging.GetImagingSettings(vSourceToken).Focus.AutoFocusMode == 'MANUAL':
-                        testBuffer = 'Supported'
-                except:
-                    testBuffer = "Not Supported"
-                    logging.exception('set imaging settings')
-                imagingResult = imagingResult + [['SetImagingSettings', testBuffer]]
+            try:
+                if 'MANUAL' in iOptions.Focus.AutoFocusModes:
+                    try:
+                        iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'MANUAL'}}}
+                        imaging.SetImagingSettings(iset)
+                        if imaging.GetImagingSettings(vSourceToken).Focus.AutoFocusMode == 'MANUAL':
+                            testBuffer = 'Supported'
+                    except:
+                        testBuffer = "Not Supported"
+                        logging.exception('set imaging settings')
+                    imagingResult = imagingResult + [['SetImagingSettings', testBuffer]]
+                    file = open(os.getcwd() + '/engine/status2.log', 'w')
+                    file.write('(62%)')
+                    file.close()
+            except:
+                logging.exception('no autofocus modes')
             
             try:
                 testBuffer = str(imaging.GetMoveOptions(vSourceToken))
@@ -672,6 +776,9 @@ class Tester:
                 logging.exception('getmoveoptions')
                 testBuffer = "Not Supported"
             imagingResult = imagingResult + [['GetMoveOptions', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(65%)')
+            file.close()
             
             try:
                 testBuffer = imaging.GetStatus(vSourceToken)
@@ -684,29 +791,41 @@ class Tester:
                 logging.exception('getstatus')
                 testBuffer2 = "Not Supported"
             imagingResult = imagingResult + [['GetStatus', testBuffer2]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(66%)')
+            file.close()
             
-            if 'MANUAL' in iOptions.Focus.AutoFocusModes:    
-                try:
-                    moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': 1.0}}}
-                    imaging.Move(moveSet)
-                    sleep(1.5)
-                    testBuffer = str(imaging.GetStatus(vSourceToken))
-                    imaging.Stop(vSourceToken)
-                except:
-                    logging.exception('manual focus move')
-                    testBuffer = "Couldn't get GetStatus response"
-                imagingResult = imagingResult + [['GetStatus (after manually moving focus forward)', testBuffer]]
-                
-                try:
-                    moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': -1.0}}}
-                    imaging.Move(moveSet)
-                    sleep(1.5)
-                    testBuffer = str(imaging.GetStatus(vSourceToken))
-                    imaging.Stop(vSourceToken)
-                except:
-                    logging.exception('manual focus move')
-                    testBuffer = "Couldn't get GetStatus response"
-                imagingResult = imagingResult + [['GetStatus (after manually moving focus backwards)', testBuffer]]
+            try:
+                if 'MANUAL' in iOptions.Focus.AutoFocusModes:    
+                    try:
+                        moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': 1.0}}}
+                        imaging.Move(moveSet)
+                        sleep(1.5)
+                        testBuffer = str(imaging.GetStatus(vSourceToken))
+                        imaging.Stop(vSourceToken)
+                    except:
+                        logging.exception('manual focus move')
+                        testBuffer = "Couldn't get GetStatus response"
+                    imagingResult = imagingResult + [['GetStatus (after manually moving focus forward)', testBuffer]]
+                    file = open(os.getcwd() + '/engine/status2.log', 'w')
+                    file.write('(67%)')
+                    file.close()
+                    
+                    try:
+                        moveSet = {'VideoSourceToken': vSourceToken, 'Focus': {'Continuous': {'Speed': -1.0}}}
+                        imaging.Move(moveSet)
+                        sleep(1.5)
+                        testBuffer = str(imaging.GetStatus(vSourceToken))
+                        imaging.Stop(vSourceToken)
+                    except:
+                        logging.exception('manual focus move')
+                        testBuffer = "Couldn't get GetStatus response"
+                    imagingResult = imagingResult + [['GetStatus (after manually moving focus backwards)', testBuffer]]
+                    file = open(os.getcwd() + '/engine/status2.log', 'w')
+                    file.write('(68%)')
+                    file.close()
+            except:
+                logging.exception('no autofocus modes')
                     
             try:
                 iset = {'VideoSourceToken': vSourceToken, 'ImagingSettings': {'Focus': {'AutoFocusMode': 'AUTO'}}}
@@ -721,6 +840,9 @@ class Tester:
         ####################################  
         
         if eventsF:
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(70%)')
+            file.close()
             logging.info(' ')
             logging.info('testing events')
             logging.info(' ')
@@ -734,6 +856,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             eventResult = [['GetServiceCapabilities', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(72%)')
+            file.close()
             
             try:
                 testBuffer = str(events.CreatePullPointSubscription())
@@ -741,6 +866,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception(' ')
             eventResult = eventResult + [['CreatePullPointSubscription', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(73%)')
+            file.close()
             
             try:
                 testBuffer = str(events.PullMessages())
@@ -748,6 +876,9 @@ class Tester:
                 testBuffer = "Not Supported - Therefore Events Module Not Supported (PullMessages Is A Mandatory Method)"
                 logging.exception(' ')
             eventResult = eventResult + [['PullMessages', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(74%)')
+            file.close()
             
             if "Not Supported" not in testBuffer:
                 try:
@@ -758,6 +889,9 @@ class Tester:
                 eventResult = eventResult + [['GetEventProperties', testBuffer]]
             else:
                 eventsF = False
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(75%)')
+            file.close()
             
             sleep(2)
         
@@ -766,6 +900,9 @@ class Tester:
         ####################################
         
         if ptzF:
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(76%)')
+            file.close()
             logging.info(' ')
             logging.info('testing ptz')
             logging.info(' ')
@@ -781,6 +918,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getnodes')
             ptzResult = [['GetNodes', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(78%)')
+            file.close()
         
             if testBuffer == "Not Supported":
                 testBuffer = "Not Supported Due To GetNodes() Unavailability"
@@ -796,6 +936,9 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('getnode')
             ptzResult = ptzResult + [['GetNode', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(80%)')
+            file.close()
             
             try:
                 testBuffer = str(ptz.GetConfigurations())
@@ -803,6 +946,9 @@ class Tester:
                 testBuffer = "Not Supported"
                 logging.exception('getconfigurations')
             ptzResult = ptzResult + [['GetConfigurations', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(84%)')
+            file.close()
         
             if testBuffer == "Not Supported":
                 testBuffer = "Unable to test due to unavailability of GetConfigurations() method"
@@ -818,6 +964,9 @@ class Tester:
                     testBuffer = "Not Supported"
                     logging.exception('getconfiguration')
             ptzResult = ptzResult + [['GetConfiguration', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(85%)')
+            file.close()
             
             sleep(1)
             
@@ -888,14 +1037,32 @@ class Tester:
                 testBuffer = "Unable to test due to unavailability of GetNodes() method"
                 getStatusF = [0, 0]
                 ptzResult = ptzResult + [['GetStatus', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(90%)')
+            file.close()
                 
             if getStatusF == [0, 0]:
-                testBuffer = 'Unable to test due to unavailability of GetStatus() method'
-                contMove = testBuffer
-                absMove = testBuffer
+                try:
+                    req = {'Timeout': None, 'Velocity': {'Zoom': {'x': '0', 'space': ''}, 'PanTilt': {'x': 0.2, 'space': '', 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.ContinuousMove(req)
+                    sleep(0.5)
+                    ptz.Stop(mediaToken)
+                    testBuffer = 'Supported'
+                except:
+                    logging.exception('error when moving')
+                    testBuffer = 'Not Supported'
                 ptzResult = ptzResult + [['ContinuousMove', testBuffer]]
+                contMove = testBuffer
+                try:
+                    req = {'Position': {'Zoom': {'x': '0'}, 'PanTilt': {'x': 1, 'y': 0}}, 'ProfileToken': mediaToken}
+                    ptz.AbsoluteMove(req)
+                    sleep(0.5)
+                    testBuffer = 'Supported'
+                except:
+                    logging.exception('error when moving 2')
+                    testBuffer = 'Not Supported'
+                absMove = testBuffer
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
-                ptzResult = ptzResult + [['RelativeMove', testBuffer]]
             elif getStatusF == [0, 1]:
                 # continuous move test if only position is available
                 try:
@@ -1047,6 +1214,9 @@ class Tester:
                     absMove = testBuffer
                     logging.exception('abs move getstatus')
                 ptzResult = ptzResult + [['AbsoluteMove', testBuffer]]
+            file = open(os.getcwd() + '/engine/status2.log', 'w')
+            file.write('(100%)')
+            file.close()
             sleep(2)    
         
         file = open(os.getcwd() + '/engine/status.log', 'w')
