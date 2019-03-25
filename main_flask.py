@@ -13,6 +13,7 @@ from engine import test
 from ast import literal_eval
 from datetime import datetime
 import importlib
+import re
 
 class Config(object):      
     def __init__(self, IP, on = False):   
@@ -244,7 +245,135 @@ def dllog():
     dateB = os.path.getmtime(os.getcwd() + '/tester.log')
     date = datetime.fromtimestamp(dateB).strftime('%Y-%m-%d %H:%M:%S')
     return render_template('log.html', data=data, date=date)
-   
+    
+@app.template_filter('getdeviceinfo_shorten')
+def getdeviceinfo_shorten(text):
+    """Get shortened output"""
+    try:
+        text = text.replace('<br/>', '')
+        dictt = literal_eval(text)
+        output = 'Manufacturer: ' + str(dictt['Manufacturer'])+ '<br> Model: '  + str(dictt['Model'])
+    except:
+        output = ''
+    return output
+
+@app.template_filter('getstreamuri_shorten')
+def getstreamuri_shorten(text):
+    """Get shortened output"""
+    try:
+        text = text.replace('<br/>', '')
+        result = re.search("'Uri': '(.*)',", text)
+        output = 'URL: ' + result.group(1)
+    except:
+        output = ''
+    return output
+
+@app.template_filter('getdateandtime_shorten')
+def getdateandtime_shorten(text):
+    """Get shortened output"""
+    try:
+        text = text.replace('<br/>', '')
+        result = re.search("'LocalDateTime': {(.*)}    },", text)
+        houri = result.group(1).find("'Hour': ")
+        hour = result.group(1)[houri+8:houri+10]
+        try:
+            hour = hour.replace(',', '')
+        except:
+            pass
+        minutei = result.group(1).find("'Minute': ")
+        minute = result.group(1)[minutei+len("'Minute': "):minutei+len("'Minute': ")+2]
+        try:
+            minute = minute.replace(',', '')
+        except:
+            pass
+        secondi = result.group(1).find("'Second': ")
+        second = result.group(1)[secondi+len("'Second': "):secondi+len("'Second': ")+2]
+        try:
+            second = second.replace(',', '')
+        except:
+            pass
+        yeari = result.group(1).find("'Year': ")
+        year = result.group(1)[yeari+len("'Year': "):yeari+len("'Year': ")+4]
+        try:
+            year = year.replace(',', '')
+        except:
+            pass
+        monthi = result.group(1).find("'Month': ")
+        month = result.group(1)[monthi+len("'Month': "):monthi+len("'Month': ")+2]
+        try:
+            month = month.replace(',', '')
+        except:
+            pass
+        dayi = result.group(1).find("'Day': ")
+        day = result.group(1)[dayi+len("'Day': "):dayi+len("'Day': ")+2]
+        try:
+            day = day.replace(',', '')
+        except:
+            pass
+        output = 'Local Date: ' + hour + ':' + minute + ':' + second + ' ' + day + '-' + month + '-' + year
+    except:
+        output = ''
+    return output
+
+@app.template_filter('getnetwork_shorten')
+def getnetwork_shorten(text):
+    """Get shortened output"""
+    try:
+        text = text.replace('<br/>', '')
+        ipv4i = text.find('IPv4')
+        ipv4i = text.find("'Address': '", ipv4i)
+        ipv4ii = text.find("'", ipv4i+len("'Address': '"))
+        output = 'IPv4: ' + text[ipv4i+len("'Address': '"):ipv4ii]
+        if "'IPv6': None" not in text:
+            try:
+                ipv6i = text.find('IPv6')
+                ipv6i = text.find("'Address': '", ipv6i)
+                ipv6ii = text.find("'", ipv6i+len("'Address': '"))
+                output = output + '<br/>IPv6: ' + text[ipv6i+len("'Address': '"):ipv6ii]
+            except:
+                pass
+    except:
+        output = ''
+    return output
+    
+@app.template_filter('getmove_shorten')
+def getnetwork_shorten(text):
+    """Get shortened output"""
+    output = ""
+    try:
+        text = text.replace('<br/>', '')
+        absi = text.find("'Absolute': ")
+        absii = text.find("{", absi+len("'Absolute': "))
+        if absii == absi + len("'Absolute': "):
+            output = 'Absolute: Supported<br/>'
+        else:
+            output = 'Absolute: Not Supported<br/>'
+    except:
+        pass
+    try:
+        text = text.replace('<br/>', '')
+        absi = text.find("'Relative': ")
+        absii = text.find("{", absi+len("'Relative': "))
+        if absii == absi + len("'Relative': "):
+            output = output + 'Relative: Supported<br/>'
+        else:
+            output = output + 'Relative: Not Supported<br/>'
+    except:
+        pass
+    try:
+        text = text.replace('<br/>', '')
+        absi = text.find("'Continuous': ")
+        print(absi)
+        absii = text.find("{", absi+len("'Continuous': "))
+        print(absii)
+        if absii == absi + len("'Continuous': "):
+            output = output + 'Continuous: Supported<br/>'
+        else:
+            output = output + 'Continuous: Not Supported<br/>'
+    except:
+        pass
+    return output
+
 if __name__ == '__main__':
     #app.run(host='127.0.0.1')
-    app.run(host='192.168.11.211', debug=False)
+    app.run(host='192.168.15.100', debug=False)

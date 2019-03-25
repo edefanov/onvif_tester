@@ -7,6 +7,28 @@ $(function() {
                 var redirectwindow = window.open('/download/'+id, '_blank')
                 redirectwindow.location;                             
             })
+            
+            $("#11").click( function() {
+                $("#viewFull10").collapse('show');   
+            })
+            $("#22").click( function() {
+                $("#viewFullDate").collapse('show');   
+            })
+            $("#33").click( function() {
+                $("#viewFull26").collapse('show');   
+            })
+            $("#44").click( function() {
+                $("#viewFullUri").collapse('show');   
+            })
+            $("#44").click( function() {
+                $("#viewFullUri").collapse('show');   
+            })
+            $("#55").click( function() {
+                $("#viewFullUri").collapse('show');   
+            })
+            $("#55").click( function() {
+                $("#viewFullZoom").collapse('show');   
+            })
             });
             </script>
     
@@ -25,7 +47,16 @@ $(function() {
   <body> 
     <div class="col-lg"
            style='padding-top: 20px;'>
-  <h3>Full Report</h3><button type="button" class="btn btn-success" id="download_{{id}}">Download CSV</button> </div>
+  <h3>Full Report</h3> <button type="button" class="btn btn-success" id="download_{{id}}">Download CSV</button> <br> 
+  <div style="padding-top:15px">
+  <a href="#getdeviceinfo" id="11" class="btn-sm btn-secondary" role="button" style="padding-left:5px">Device Information</a>
+   <a href="#systimedate" id="22" class="btn-sm btn-secondary" role="button">Time and Date</a>
+    <a href="#networkinterfaces" id="33" class="btn-sm btn-secondary" role="button">IPv4, IPv6, MAC-address</a>
+     <a href="#getstream" id="44" class="btn-sm btn-secondary" role="button">Stream URI</a>
+      <a href="#moveoptions" id="55" class="btn-sm btn-secondary" role="button">Zoom Move Options</a>
+        <a href="#ptz" id="66" class="btn-sm btn-secondary" role="button">PTZ Move & Status</a>
+ </div>
+  </div>
 
   <div class="col-lg"
            style='padding-top: 20px;'>
@@ -71,12 +102,81 @@ $(function() {
     
     <tr>
         
+        {% if 'GetStreamUri' in dat[0] %}
         
+        <td id='getstream'><span> {{dat[0]}} <br> <br> <mark> Stream URL </mark> </span> </td>
         
+        {% elif 'GetDeviceInformation' in dat[0] %}
         
+        <td id='getdeviceinfo'><span> {{dat[0]}} <br> <br> <mark> Name & manufacturer </mark> </span> </td>
+        
+        {% elif 'SystemDateAndTime' in dat[0] %}
+        
+        <td id='systimedate'><span> {{dat[0]}} <br> <br> <mark> System time & date </mark> </span> </td>
+        
+        {% elif 'GetNetworkInterfaces' in dat[0] %}
+        
+        <td id='networkinterfaces'><span> {{dat[0]}} <br> <br> <mark> IPv4, IPv6, MAC-address, DHCP config </mark> </span> </td>
+        
+        {% elif 'GetMoveOptions' in dat[0] %}
+        
+        <td id='moveoptions'><span> {{dat[0]}} <br> <br> <mark> Focus move options </mark> </span> </td>
+        
+        {% elif 'FocusStatus' in dat[1] %}
+        
+        <td id='moveoptions'><span> {{dat[0]}} <br> <br> <mark> Focus coordinates </mark> </span> </td>
+        
+        {% elif 'Position property' in dat[1] %}
+        
+        <td id='moveoptions'><span> {{dat[0]}} <br> <br> <mark> PTZ Move Coordinates </mark> </span> </td>
+        
+        {% elif 'GetNodes' in dat[0] %}
+        
+        <td id='moveoptions'><span> {{dat[0]}} <br> <br> <mark> PTZ Supported Move Types </mark> </span> </td>
+        
+        {% else %}
         
         <td>{{ dat[0] }}</td>
-        <td class='align-middle' >{% if dat[1]|length > 300 %}
+        
+        {% endif %}
+        <td class='align-middle' >
+        
+        {% if 'Manufacturer' in dat[1] %}
+        <span> {{dat[1] | getdeviceinfo_shorten | safe }} </span> <br> <br>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
+        <div class="collapse" id="viewFull{{count|length}}">
+            <pre>{{ dat[1] | safe }}</pre>
+        </div>
+        
+        {% elif 'Uri' in dat[1] %}
+        <span> {{dat[1] | getstreamuri_shorten | safe }} </span> <br> <br>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFullUri" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
+        <div class="collapse" id="viewFullUri">
+            <pre>{{ dat[1] | safe }}</pre>
+        </div>
+        
+        {% elif 'DateTimeType' in dat[1] %}
+        <span> {{dat[1] | getdateandtime_shorten | safe }} </span> <br> <br>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFullDate" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
+        <div class="collapse" id="viewFullDate">
+            <pre>{{ dat[1] | safe }}</pre>
+        </div>
+        
+        {% elif 'GetMoveOptions' in dat[0] %}
+        <span> {{dat[1] | getmove_shorten | safe }} </span> <br> <br>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFullZoom" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
+        <div class="collapse" id="viewFullZoom">
+            <pre>{{ dat[1] | safe }}</pre>
+        </div>
+        
+        {% elif 'GetNetworkInterfaces' in dat[0] %}
+        <span> {{dat[1] | getnetwork_shorten | safe }} </span> <br> <br>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFullZoom" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
+        <div class="collapse" id="viewFullZoom">
+            <pre>{{ dat[1] | safe }}</pre>
+        </div>
+        
+        {% elif '{' in dat[1] %}
         
         <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#viewFull{{count|length}}" role="button" aria-expanded="false" aria-controls="collapseExample">View Full</a>
           <div class="collapse" id="viewFull{{count|length}}">
@@ -96,6 +196,10 @@ $(function() {
             {% elif dat[1] == 'Not Supported' %}
             
             <span style='color:red'> {{ dat[1] }}</span>
+            
+            {% elif dat[1] == '[]' %}
+            
+            <span style='color:red'> None </span>
             
             {% else %}
         
